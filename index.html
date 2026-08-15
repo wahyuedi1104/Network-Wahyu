@@ -86,18 +86,32 @@ a{color:inherit;}
 .container{max-width:1180px;margin:0 auto;padding:0 28px;}
 section{position:relative;z-index:1;}
 
+/* ---------- SPA HIDE/SHOW LOGIC ---------- */
+main > section {
+  display: none;
+  animation: fadeUp 0.4s ease forwards;
+}
+main > section.active-sec {
+  display: block;
+}
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(15px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
 /* ---------- layout shell ---------- */
 .shell{display:flex;min-height:100vh;}
 .sidenav{
-  width:240px;flex-shrink:0;
+  width:260px;flex-shrink:0;
   border-right:1px solid var(--line);
   position:sticky;top:0;height:100vh;
   padding:26px 18px;
   display:flex;flex-direction:column;
   z-index:20;
   background:var(--bg);
+  overflow-y: auto;
 }
-.brand{display:flex;align-items:center;gap:10px;margin-bottom:34px;padding:0 6px;}
+.brand{display:flex;align-items:center;gap:10px;margin-bottom:20px;padding:0 6px;}
 .brand-mark{
   width:32px;height:32px;border-radius:8px;
   background:linear-gradient(135deg,var(--signal),#2A8F86);
@@ -107,10 +121,16 @@ section{position:relative;z-index:1;}
 }
 .brand-name{font-family:var(--font-display);font-weight:700;font-size:1rem;line-height:1.1;}
 .brand-name span{display:block;font-family:var(--font-mono);font-weight:400;font-size:.66rem;color:var(--muted-dim);letter-spacing:.06em;}
+
+/* ---------- SIDEBAR GROUPING ---------- */
+.nav-group {
+  font-family: var(--font-mono); font-size: .65rem; color: var(--muted-dim); 
+  text-transform: uppercase; letter-spacing: .1em; margin: 18px 0 6px 10px; font-weight: 700;
+}
 .navlist{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:2px;flex:1;}
 .navlist a{
   display:flex;align-items:center;gap:10px;
-  padding:9px 10px;border-radius:8px;
+  padding:8px 10px;border-radius:8px;
   text-decoration:none;color:var(--muted);
   font-size:.86rem;font-weight:500;
   border-left:2px solid transparent;
@@ -134,6 +154,7 @@ section{position:relative;z-index:1;}
   display: block; padding: 14px 4px; border-bottom: 1px solid var(--line);
   color: var(--text); text-decoration: none; font-family: var(--font-mono); font-size: .9rem;
 }
+.mob-group { font-family: var(--font-mono); font-size: .7rem; color: var(--signal); text-transform: uppercase; margin: 20px 4px 5px; }
 
 .main{flex:1;min-width:0; overflow-x: hidden;}
 
@@ -194,8 +215,41 @@ section{position:relative;z-index:1;}
 .stack-row:nth-child(7) .packet{animation-delay:1.75s;}
 .stack-row:nth-child(8) .packet{animation-delay:2.1s;}
 
+/* Insights Grid in Hero */
+.insight-box {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 15px;
+  margin-top: 24px;
+}
+.insight-card {
+  background: var(--panel-alt);
+  border: 1px solid var(--line);
+  padding: 20px;
+  border-radius: var(--radius);
+  transition: transform .2s;
+}
+.insight-card:hover {
+  transform: translateY(-3px);
+  border-color: var(--accent);
+}
+.insight-card h4 {
+  font-family: var(--font-mono);
+  color: var(--signal);
+  font-size: .85rem;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+}
+.insight-card p {
+  font-size: .88rem;
+  margin: 0;
+  color: var(--text);
+  line-height: 1.6;
+}
+
 /* ---------- generic section header ---------- */
-.sec{padding:74px 0;border-top:1px solid var(--line);}
+.sec{padding:74px 0;border-top:1px solid var(--line); border:none;}
 .sec-head{max-width:640px;margin-bottom:42px;}
 .sec-head h2{font-size:clamp(1.5rem,2.6vw,2.1rem);}
 
@@ -319,7 +373,7 @@ section{position:relative;z-index:1;}
 /* ---------- topology / routing ---------- */
 .topo-wrap{
   border:1px solid var(--line);border-radius:var(--radius);
-  background:var(--panel);padding:14px;margin-bottom:22px;
+  background:var(--panel);padding:14px;margin-bottom:22px; overflow-x: auto;
 }
 .topo-hint{font-family:var(--font-mono);font-size:.7rem;color:var(--muted-dim);padding:6px 6px 12px;text-transform:uppercase;letter-spacing:.06em;}
 svg .node{cursor:pointer;}
@@ -341,7 +395,7 @@ svg .cable{stroke:var(--line);stroke-width:2;}
 .device-panel .placeholder{color:var(--muted-dim);font-size:.88rem;}
 
 /* protocol tabs */
-.tabbar{display:flex;flex-wrap:wrap;gap:6px;margin:34px 0 18px;}
+.tabbar{display:flex;flex-wrap:wrap;gap:6px;margin:18px 0 18px;}
 .tabbtn{
   font-family:var(--font-mono);font-size:.78rem;
   padding:8px 14px;border-radius:8px;border:1px solid var(--line);
@@ -461,15 +515,26 @@ footer p{font-family:var(--font-mono);font-size:.76rem;color:var(--muted-dim);}
 
 <!-- MENU MOBILE -->
 <nav class="mobmenu" id="mobMenu">
-  <a href="#hero">Beranda</a>
-  <a href="#osi">OSI Layer</a>
-  <a href="#tcpip">TCP/IP & Ports</a>
-  <a href="#troubleshoot">Troubleshooting</a>
-  <a href="#vlan">Switching & VLAN</a>
-  <a href="#routing">Routing Protocol</a>
-  <a href="#config">Config & CLI (Kamus)</a>
-  <a href="#gpon">GPON & FTTH</a>
-  <a href="#hr">HR & Culture Fit</a>
+  <div class="mob-group">Profile & Intro</div>
+  <a href="#hero">00 Self Introduction</a>
+  
+  <div class="mob-group">Networking</div>
+  <a href="#osi">01 OSI Layer</a>
+  <a href="#tcpip">02 TCP/IP & Ports</a>
+  <a href="#troubleshoot">03 Troubleshooting</a>
+  <a href="#vlan">04 Switching & VLAN</a>
+  <a href="#routing">05 Routing Protocol</a>
+  <a href="#config">06 Config & CLI (Kamus)</a>
+  <a href="#gpon">07 GPON & FTTH</a>
+  <a href="#topologi">08 Topologi (Real-Case)</a>
+  
+  <div class="mob-group">General & Daily Use</div>
+  <a href="#linux">09 Linux Basics</a>
+  <a href="#excel">10 Excel Mastery</a>
+  <a href="#sql">11 SQL Basics</a>
+  
+  <div class="mob-group">HR & Fit</div>
+  <a href="#hr">12 HR Questions</a>
 </nav>
 
 <div class="shell">
@@ -480,39 +545,39 @@ footer p{font-family:var(--font-mono);font-size:.76rem;color:var(--muted-dim);}
       <div class="brand-name">Networking<span>masterclass</span></div>
     </div>
     <ul class="navlist" id="navlist">
-      <li><a href="#hero" data-sec="hero"><span class="num">00</span> Introduction</a></li>
-      <li><a href="#osi" data-sec="osi"><span class="num">01</span> OSI Layer</a></li>
-      <li><a href="#tcpip" data-sec="tcpip"><span class="num">02</span> TCP/IP & Ports</a></li>
-      <li><a href="#troubleshoot" data-sec="troubleshoot"><span class="num">03</span> Troubleshooting</a></li>
-      <li><a href="#vlan" data-sec="vlan"><span class="num">04</span> Switching & VLAN</a></li>
-      <li><a href="#routing" data-sec="routing"><span class="num">05</span> Routing Protocol</a></li>
-      <li><a href="#config" data-sec="config"><span class="num">06</span> Config & CLI (Kamus)</a></li>
-      <li><a href="#gpon" data-sec="gpon"><span class="num">07</span> GPON & FTTH</a></li>
-      <li><a href="#hr" data-sec="hr"><span class="num">08</span> HR & Culture Fit</a></li>
+      <div class="nav-group">Profile & Intro</div>
+      <li><a href="#hero" class="active"><span class="num">00</span> Self Introduction</a></li>
+      
+      <div class="nav-group">Networking</div>
+      <li><a href="#osi"><span class="num">01</span> OSI Layer</a></li>
+      <li><a href="#tcpip"><span class="num">02</span> TCP/IP & Ports</a></li>
+      <li><a href="#troubleshoot"><span class="num">03</span> Troubleshooting</a></li>
+      <li><a href="#vlan"><span class="num">04</span> Switching & VLAN</a></li>
+      <li><a href="#routing"><span class="num">05</span> Routing Protocol</a></li>
+      <li><a href="#config"><span class="num">06</span> Config & CLI (Kamus)</a></li>
+      <li><a href="#gpon"><span class="num">07</span> GPON & FTTH</a></li>
+      <li><a href="#topologi"><span class="num">08</span> Topologi (Real-Case)</a></li>
+
+      <div class="nav-group">General & Daily Use</div>
+      <li><a href="#linux"><span class="num">09</span> Linux Basic & Daily</a></li>
+      <li><a href="#excel"><span class="num">10</span> Excel Mastery</a></li>
+      <li><a href="#sql"><span class="num">11</span> SQL Basics</a></li>
+
+      <div class="nav-group">HR & Fit</div>
+      <li><a href="#hr"><span class="num">12</span> HR Basic Questions</a></li>
     </ul>
-    <div class="sidenav-foot">Ready for Tech Interview →</div>
   </aside>
 
   <main class="main">
 
-  <!-- HERO -->
-  <section class="hero" id="hero">
+  <!-- ==================== HERO / PROFIL ==================== -->
+  <section class="sec active-sec" id="hero" style="padding-top: 40px; border-top: none;">
     <div class="container hero-grid">
       <div>
         <div class="eyebrow">Practical Networking Guide</div>
         <h1>Networking Interview Guide — Pahami, Bukan Hafalkan</h1>
         <p class="hero-lead">Materi networking untuk persiapan technical interview. Penjelasannya dibuat sederhana, dengan contoh jawaban Indonesia dan English yang natural, supaya lu lebih gampang paham dan menjelaskan konsepnya saat interview.</p>
         <p class="en">"A simple networking guide for technical interviews. The explanations are practical, easy to understand, and easy to explain."</p>
-        <div class="hero-tags">
-          <span class="tag">OSI 7 Layers</span>
-          <span class="tag">Troubleshooting 101</span>
-          <span class="tag">VLAN</span>
-          <span class="tag">OSPF vs BGP</span><span class="tag">Kamus Config Cisco</span>
-        </div>
-        <div class="hero-cta">
-          <a href="#osi" class="btn btn-primary">Mulai dari OSI Layer</a>
-          <a href="#config" class="btn btn-ghost">Langsung ke Kamus Config →</a>
-        </div>
 
         <div class="tip" style="margin-top:24px;">
           <div class="ic">PROFILE</div>
@@ -546,11 +611,44 @@ footer p{font-family:var(--font-mono);font-size:.76rem;color:var(--muted-dim);}
         <div class="stack-row"><span class="packet"></span><span class="n">1</span><span class="l">Physical</span><span class="d">Kabel LAN, Fiber, WiFi</span></div>
       </div>
     </div>
+
+    <!-- NEW SECTION: INSIGHTS & KESIMPULAN -->
+    <div class="container" style="margin-top: 40px;">
+      <div class="eyebrow">Executive Summary</div>
+      <h2 style="font-family: var(--font-display); font-size: 1.5rem; margin-bottom: 20px; color: var(--text);">Kesimpulan & Insight Materi</h2>
+      
+      <div class="insight-box">
+        <div class="insight-card">
+          <h4>OSI & Troubleshooting</h4>
+          <p>Jaringan komputer beroperasi secara berlapis. <i>Troubleshooting</i> selalu dimulai secara terstruktur (Bottom-Up) dari layer terbawah (Fisik/Kabel) sebelum melompat menyalahkan konfigurasi <i>software</i> atau IP.</p>
+        </div>
+        <div class="insight-card">
+          <h4>VLAN & Routing</h4>
+          <p>VLAN memecah jaringan secara logis agar aman dan bebas dari <i>broadcast storm</i>. Sementara Routing Protocol bertindak sebagai GPS cerdas yang memastikan data antar VLAN bisa saling menemukan jalan tercepat.</p>
+        </div>
+        <div class="insight-card">
+          <h4>Fiber Optic (GPON)</h4>
+          <p>Arsitektur GPON membuktikan bahwa <i>bandwidth</i> raksasa bisa didistribusikan ke ribuan rumah pelanggan secara pasif (tanpa butuh aliran listrik di jalanan), memangkas cost operasional besar-besaran.</p>
+        </div>
+        <div class="insight-card">
+          <h4>Linux CLI</h4>
+          <p>Menguasai terminal Linux bukan sekadar gaya. Ini adalah kemampuan mutlak untuk memantau performa *server* secara *real-time* dan menemukan akar penyebab masalah (*root cause*) lewat pembacaan log.</p>
+        </div>
+        <div class="insight-card">
+          <h4>Excel Reporting</h4>
+          <p>Data mentah berjumlah ribuan baris dari NMS tidak ada nilainya tanpa pengolahan. Penguasaan VLOOKUP dan PivotTable adalah jembatan untuk mengubah data teknis menjadi laporan metrik performa (*SLA*).</p>
+        </div>
+        <div class="insight-card">
+          <h4>Culture Fit (HR)</h4>
+          <p>Di dunia jaringan operasional 24/7, <i>hard skill</i> akan mendatangkan panggilan *interview*, tetapi ketenangan saat menghadapi <i>downtime</i> dan kemampuan menjalin komunikasi yang menentukan lu diterima kerja.</p>
+        </div>
+      </div>
+    </div>
   </section>
 
-  <!-- OSI -->
+  <!-- ==================== OSI ==================== -->
   <section class="sec" id="osi">
-    <div class="container">
+    <div class="container" style="padding-top: 50px;">
       <div class="sec-head">
         <div class="eyebrow">01 — The Blueprint</div>
         <h2>OSI Layer (Dari Application Sampai Physical)</h2>
@@ -672,15 +770,15 @@ footer p{font-family:var(--font-mono);font-size:.76rem;color:var(--muted-dim);}
         <div class="qa-card">
           <div class="qa-q">Layer 2 dan Layer 3 bedanya apa?<span class="toggle-ic">+</span></div>
           <div class="qa-a">
-            "Layer 2 mainly uses MAC addresses for local network communication via Switches, while Layer 3 uses IP addresses to communicate between different networks via Routers."
-            <p class="en">Versi Indonesia: Layer 2 menggunakan MAC Address untuk komunikasi lokal (Switch), sedangkan Layer 3 menggunakan IP Address untuk komunikasi antar-jaringan (Router).</p>
+            "Layer 2 handles Frames using MAC addresses for local switching, while Layer 3 handles Packets using IP addresses for routing between different networks."
+            <p class="en">Versi Indonesia: Layer 2 menangani *Frame* menggunakan MAC Address (Switching, VLAN untuk memecah broadcast domain). Layer 3 menangani *Packet* menggunakan IP Address (Routing untuk menghubungkan network yang berbeda).</p>
           </div>
         </div>
         <div class="qa-card">
           <div class="qa-q">Apa beda TCP dan UDP? (Layer 4)<span class="toggle-ic">+</span></div>
           <div class="qa-a">
-            "TCP utilizes a 3-way handshake to ensure reliable delivery, whereas UDP is connectionless, prioritizing speed over reliability."
-            <p class="en">Versi Indonesia: TCP itu reliable (aman) karena pakai 3-way handshake (memastikan data sampai utuh), sedangkan UDP itu lebih mengutamakan kecepatan tanpa peduli data sampai utuh atau tidak (cocok untuk streaming/video call).</p>
+            "TCP is reliable because it uses Sequence Numbers, Acknowledgement, and Retransmission to ensure data integrity, starting with a 3-way handshake. UDP is connectionless and prioritizes speed."
+            <p class="en">Versi Indonesia: TCP reliable bukan cuma karena 3-way handshake (ini untuk establish connection), melainkan karena adanya Sequence Number, Acknowledgement, dan Retransmission untuk memastikan data utuh. Sedangkan UDP lebih mengutamakan kecepatan (cocok untuk streaming/video call).</p>
           </div>
         </div>
         <div class="qa-card">
@@ -695,9 +793,9 @@ footer p{font-family:var(--font-mono);font-size:.76rem;color:var(--muted-dim);}
     </div>
   </section>
 
-  <!-- TCP/IP & PORTS -->
+  <!-- ==================== TCP/IP & PORTS ==================== -->
   <section class="sec" id="tcpip">
-    <div class="container">
+    <div class="container" style="padding-top: 50px;">
       <div class="sec-head">
         <div class="eyebrow">02 — The Real World</div>
         <h2>Model TCP/IP & Port Dasar</h2>
@@ -763,8 +861,8 @@ footer p{font-family:var(--font-mono);font-size:.76rem;color:var(--muted-dim);}
         <div class="qa-card">
           <div class="qa-q">DNS menggunakan TCP atau UDP di port berapa?<span class="toggle-ic">+</span></div>
           <div class="qa-a">
-            "DNS commonly uses port 53. It uses UDP for standard queries because it's faster, but it uses TCP for zone transfers or if the payload is too large."
-            <p class="en">Versi Indonesia: Port 53. Mayoritas pakai UDP untuk proses query (karena cepat), dan pakai TCP jika melakukan zone transfer antar server.</p>
+            "No. DNS commonly uses UDP port 53 for regular queries, but it can use TCP port 53 for cases such as zone transfers, responses requiring TCP fallback, and modern protocols like DNS over TLS/HTTPS."
+            <p class="en">Versi Indonesia: Port 53. Umumnya pakai UDP 53 untuk query biasa agar cepat. TCP 53 dipakai untuk zone transfer, payload yang terlalu besar, fallback, atau teknologi modern seperti DNS over TLS/HTTPS.</p>
           </div>
         </div>
       </div>
@@ -772,9 +870,9 @@ footer p{font-family:var(--font-mono);font-size:.76rem;color:var(--muted-dim);}
     </div>
   </section>
 
-  <!-- TROUBLESHOOTING -->
+  <!-- ==================== TROUBLESHOOTING ==================== -->
   <section class="sec" id="troubleshoot">
-    <div class="container">
+    <div class="container" style="padding-top: 50px;">
       <div class="sec-head">
         <div class="eyebrow">03 — How to Fix Things</div>
         <h2>Basic Troubleshooting — Cara Menjawab Saat Interview</h2>
@@ -783,7 +881,7 @@ footer p{font-family:var(--font-mono);font-size:.76rem;color:var(--muted-dim);}
       
       <div class="tip"><div class="ic">SKENARIO</div><div class="tx"><b>HR: "Kalau ada komputer yang tidak bisa konek internet, mulai cek dari mana?"</b></div></div>
       
-      <p style="color:var(--text); margin-bottom: 20px;">Jawab secara terstruktur. Salah satu cara yang mudah dijelaskan saat interview adalah metode <b>Bottom-Up</b>, mulai dari Layer 1 lalu naik ke layer berikutnya.</p>
+      <p style="color:var(--text); margin-bottom: 20px;">Jawab secara terstruktur. Walaupun metode <b>Bottom-Up</b> (dari fisik/kabel naik ke atas) sangat direkomendasikan, di dunia nyata kita juga bisa pakai Top-Down atau Divide & Conquer tergantung gejala error.</p>
 
       <div class="compare" style="grid-template-columns: 1fr;">
           <div class="compare-col" style="border: none;">
@@ -813,9 +911,9 @@ footer p{font-family:var(--font-mono);font-size:.76rem;color:var(--muted-dim);}
     </div>
   </section>
 
-  <!-- VLAN -->
+  <!-- ==================== VLAN ==================== -->
   <section class="sec" id="vlan">
-    <div class="container">
+    <div class="container" style="padding-top: 50px;">
       <div class="sec-head">
         <div class="eyebrow">04 — Local Isolation</div>
         <h2>VLAN (Virtual LAN) & Switching</h2>
@@ -889,9 +987,9 @@ footer p{font-family:var(--font-mono);font-size:.76rem;color:var(--muted-dim);}
     </div>
   </section>
 
-  <!-- ROUTING -->
+  <!-- ==================== ROUTING ==================== -->
   <section class="sec" id="routing">
-    <div class="container">
+    <div class="container" style="padding-top: 50px;">
       <div class="sec-head">
         <div class="eyebrow">05 — Finding The Path</div>
         <h2>Routing Protocol — Memilih Jalur</h2>
@@ -899,8 +997,8 @@ footer p{font-family:var(--font-mono);font-size:.76rem;color:var(--muted-dim);}
       </div>
 
       <div class="topo-wrap">
-        <div class="topo-hint">Simulasi Routing — klik perangkat untuk melihat perannya</div>
-        <svg viewBox="0 0 800 260" width="100%" id="topoSvg" class="interactive-topo">
+        <div class="topo-hint">Simulasi Routing Utama — klik perangkat untuk melihat perannya</div>
+        <svg viewBox="0 0 800 260" width="100%" class="interactive-topo">
           <!-- cables -->
           <line x1="90" y1="150" x2="180" y2="150" class="cable"/>
           <line x1="220" y1="150" x2="330" y2="130" class="cable"/>
@@ -966,7 +1064,27 @@ footer p{font-family:var(--font-mono);font-size:.76rem;color:var(--muted-dim);}
         <p class="placeholder dev-body">Pilih PC, Switch, Router, atau Cloud pada diagram untuk melihat peran perangkat tersebut dalam jaringan.</p>
       </div>
 
-      <div class="tabbar" id="protoTabs" style="margin-top: 40px;">
+      <!-- STATIC VS DYNAMIC COMPARISON -->
+      <h3 style="margin-top: 40px; color: var(--text);">Static Route vs Dynamic Route</h3>
+      <p style="color:var(--muted); margin-bottom: 20px;">Sebelum masuk ke jenis-jenis protokol (RIP, OSPF, BGP), pahami dulu dua kategori utama dalam mengatur jalan untuk data.</p>
+      
+      <div class="compare" style="margin-bottom: 24px;">
+        <div class="compare-col">
+          <h4>1. Static Route</h4>
+          <div class="compare-row">Dikonfigurasi <b>manual</b> oleh admin. Ibarat mengetik rute jalan di GPS secara manual belokan per belokan.</div>
+          <div class="compare-row">Jika jalanan ditutup (kabel putus), data akan mandek karena router tidak tahu jalan alternatif.</div>
+          <div class="compare-row">Sangat <b>ringan</b>, tidak membebani memori CPU router karena tidak perlu menghitung rute.</div>
+        </div>
+        <div class="compare-col">
+          <h4>2. Dynamic Route</h4>
+          <div class="compare-row">Dikonfigurasi <b>otomatis</b> via protokol. Ibarat pakai *Google Maps*, router saling melapor kondisi jalan ter-update.</div>
+          <div class="compare-row">Jika kabel putus, router <b>cerdas mencari jalan memutar</b> dengan sendirinya (Auto-Failover).</div>
+          <div class="compare-row">Membutuhkan RAM & CPU ekstra untuk kalkulasi jalan terbaik.</div>
+        </div>
+      </div>
+
+      <div class="tabbar" style="margin-top: 20px;">
+        <span style="font-family: var(--font-mono); font-size: .75rem; color: var(--muted-dim); align-self: center; margin-right: 10px;">PROTOL DYNAMIC ROUTING:</span>
         <button class="tabbtn active" data-tab="static">Static Route</button>
         <button class="tabbtn" data-tab="rip">RIPv2</button>
         <button class="tabbtn" data-tab="eigrp">EIGRP</button>
@@ -992,7 +1110,7 @@ footer p{font-family:var(--font-mono);font-size:.76rem;color:var(--muted-dim);}
         <p>RIP adalah protokol lawas berbasis <i>Distance-Vector</i>. Dia menentukan jalur terbaik semata-mata berdasarkan jumlah lompatan router (<b>Hop Count</b>) dengan batas maksimal 15 lompatan. Kurang disarankan untuk jaringan modern.</p>
         <p class="en">"A legacy Distance-Vector protocol. It relies solely on hop count to determine the best path, with a maximum limit of 15 hops. Not ideal for complex or large-scale modern networks."</p>
         <div class="proto-grid">
-          <div class="proto-card"><div class="k">Tipe</div><div class="v">Distance Vector (IGP)</div></div>
+          <div class="proto-card"><div class="k">Tipe</div><div class="v">Dynamic (Distance Vector)</div></div>
           <div class="proto-card"><div class="k">Parameter Jalan</div><div class="v">Hop Count (Maks 15)</div></div>
           <div class="proto-card"><div class="k">Kapan Dipakai?</div><div class="v">Jaringan sangat kecil/jadul</div></div>
         </div>
@@ -1004,7 +1122,7 @@ footer p{font-family:var(--font-mono);font-size:.76rem;color:var(--muted-dim);}
         <p>EIGRP awalnya adalah protokol proprietary buatan Cisco (sekarang sudah terbuka sebagian). Dikenal sebagai <i>Advanced Distance Vector</i> atau <i>Hybrid</i> karena menggabungkan fitur terbaik dari Link-State dan Distance Vector. Metriknya sangat presisi meliputi Bandwidth, Delay, Load, dan Reliability.</p>
         <p class="en">"An advanced distance-vector routing protocol originally proprietary to Cisco. It offers extremely fast convergence using the DUAL algorithm and calculates routes based on a complex metric of bandwidth and delay."</p>
         <div class="proto-grid">
-          <div class="proto-card"><div class="k">Tipe</div><div class="v">Hybrid / Adv. Distance Vector</div></div>
+          <div class="proto-card"><div class="k">Tipe</div><div class="v">Dynamic (Hybrid)</div></div>
           <div class="proto-card"><div class="k">Parameter Jalan</div><div class="v">Bandwidth & Delay</div></div>
           <div class="proto-card"><div class="k">Kecepatan Adaptasi</div><div class="v">Sangat Cepat (DUAL Algorithm)</div></div>
         </div>
@@ -1016,7 +1134,7 @@ footer p{font-family:var(--font-mono);font-size:.76rem;color:var(--muted-dim);}
         <p>OSPF adalah routing protocol berbasis <i>Link-State</i>. Router saling bertukar informasi topologi dan menggunakan nilai <b>Cost</b> untuk menentukan jalur terbaik. OSPF umum digunakan untuk routing internal.</p>
         <p class="en">"OSPF is a Link-State routing protocol. Routers exchange topology information and use cost to select the best path. It is commonly used for internal routing."</p>
         <div class="proto-grid">
-          <div class="proto-card"><div class="k">Tipe</div><div class="v">Link-State (IGP)</div></div>
+          <div class="proto-card"><div class="k">Tipe</div><div class="v">Dynamic (Link-State)</div></div>
           <div class="proto-card"><div class="k">Parameter Jalan</div><div class="v">Bandwidth / Cost</div></div>
           <div class="proto-card"><div class="k">Kecepatan Adaptasi</div><div class="v">Sangat Cepat (Fast Convergence)</div></div>
         </div>
@@ -1028,15 +1146,89 @@ footer p{font-family:var(--font-mono);font-size:.76rem;color:var(--muted-dim);}
         <p>BGP digunakan untuk bertukar informasi routing antara Autonomous System yang berbeda. BGP banyak digunakan antara ISP dan jaringan besar, dan keputusan routing dapat dipengaruhi oleh policy dan path attributes.</p>
         <p class="en">"BGP is used to exchange routing information between different Autonomous Systems. It is commonly used between ISPs and large networks, where routing decisions can be influenced by policies and path attributes."</p>
         <div class="proto-grid">
-          <div class="proto-card"><div class="k">Tipe</div><div class="v">Path Vector (EGP)</div></div>
+          <div class="proto-card"><div class="k">Tipe</div><div class="v">Dynamic (Path Vector/EGP)</div></div>
           <div class="proto-card"><div class="k">Parameter Jalan</div><div class="v">Policy (AS-Path, Local Pref)</div></div>
           <div class="proto-card"><div class="k">Kapan Dipakai?</div><div class="v">Peering Internet antar ISP</div></div>
         </div>
       </div>
 
+      <!-- ====== KONSEP LANJUTAN: BACKUP & FAILOVER ====== -->
+      <div style="margin-top: 50px;">
+        <h3 style="font-family: var(--font-display); font-size: 1.4rem; color: var(--text);">Konsep Lanjutan: Backup Link & OSPF Cost</h3>
+        <p style="color: var(--muted); margin-bottom: 20px;">Di industri nyata, engineer merancang routing agar saat satu kabel putus, koneksi otomatis pindah ke jalur cadangan tanpa <i>downtime</i> parah.</p>
+        
+        <div class="vlan-wrap" style="grid-template-columns: 1fr 1fr; gap: 20px;">
+          <!-- Topo 1: Floating Static Route -->
+          <div class="vlan-diagram" style="padding: 20px; text-align: center;">
+            <div class="topo-hint" style="margin-bottom: 10px;">Topologi 1: Static Route (Floating Backup)</div>
+            <svg viewBox="0 0 300 160" width="100%">
+              <rect x="20" y="60" width="50" height="40" rx="8" fill="#0F1A2E" stroke="#c084fc" stroke-width="2"/>
+              <text x="45" y="85" text-anchor="middle" class="nodelabel" style="fill: #fff; font-weight: bold;">R1</text>
+              
+              <rect x="230" y="60" width="50" height="40" rx="8" fill="#0F1A2E" stroke="#c084fc" stroke-width="2"/>
+              <text x="255" y="85" text-anchor="middle" class="nodelabel" style="fill: #fff; font-weight: bold;">R2</text>
+              
+              <!-- Main Link -->
+              <path d="M 70 70 Q 150 20 230 70" fill="none" stroke="#4FD1C5" stroke-width="3" />
+              <text x="150" y="45" text-anchor="middle" class="nodelabel" fill="#4FD1C5">Fiber (AD: 1)</text>
+              
+              <!-- Backup Link -->
+              <path d="M 70 90 Q 150 140 230 90" fill="none" stroke="#F5A623" stroke-width="2" stroke-dasharray="5,5" />
+              <text x="150" y="130" text-anchor="middle" class="nodelabel" fill="#F5A623">Radio (AD: 10)</text>
+              
+              <circle r="4" fill="#4FD1C5" filter="drop-shadow(0 0 4px #4FD1C5)"><animateMotion dur="2s" repeatCount="indefinite" path="M 70 70 Q 150 20 230 70"/></circle>
+            </svg>
+            <p style="font-size: 0.8rem; color: var(--muted); margin-top: 10px; text-align: left;">Router selalu memilih jalur dengan <b>AD (Administrative Distance)</b> terkecil (Fiber). Jika kabel Fiber putus, rute jalur Radio (AD 10) akan otomatis menggantikan di tabel routing.</p>
+          </div>
+
+          <!-- Topo 2: OSPF Dynamic Cost -->
+          <div class="vlan-diagram" style="padding: 20px; text-align: center;">
+            <div class="topo-hint" style="margin-bottom: 10px;">Topologi 2: Dynamic Route (OSPF Auto-Path)</div>
+            <svg viewBox="0 0 300 160" width="100%">
+              <!-- R1 Kiri -->
+              <rect x="20" y="60" width="40" height="40" rx="8" fill="#0F1A2E" stroke="#c084fc" stroke-width="2"/>
+              <text x="40" y="85" text-anchor="middle" class="nodelabel" style="fill: #fff;">R1</text>
+              <!-- R2 Atas -->
+              <rect x="130" y="10" width="40" height="40" rx="8" fill="#0F1A2E" stroke="#c084fc" stroke-width="2"/>
+              <text x="150" y="35" text-anchor="middle" class="nodelabel" style="fill: #fff;">R2</text>
+              <!-- R3 Kanan -->
+              <rect x="240" y="60" width="40" height="40" rx="8" fill="#0F1A2E" stroke="#c084fc" stroke-width="2"/>
+              <text x="260" y="85" text-anchor="middle" class="nodelabel" style="fill: #fff;">R3</text>
+
+              <!-- Jalur Bawah Langsung -->
+              <line x1="60" y1="80" x2="240" y2="80" stroke="#F5A623" stroke-width="2" stroke-dasharray="5,5"/>
+              <text x="150" y="100" text-anchor="middle" class="nodelabel" fill="#F5A623">Jalur Bawah Cost 100</text>
+
+              <!-- Jalur Atas Muter -->
+              <line x1="50" y1="60" x2="130" y2="30" stroke="#4FD1C5" stroke-width="3"/>
+              <line x1="170" y1="30" x2="250" y2="60" stroke="#4FD1C5" stroke-width="3"/>
+              <text x="150" y="65" text-anchor="middle" class="nodelabel" fill="#4FD1C5">Cost 1 + 1 = 2 (Dipilih)</text>
+
+              <circle r="4" fill="#4FD1C5" filter="drop-shadow(0 0 4px #4FD1C5)"><animateMotion dur="2.5s" repeatCount="indefinite" path="M 50 60 L 130 30 L 170 30 L 250 60"/></circle>
+            </svg>
+            <p style="font-size: 0.8rem; color: var(--muted); margin-top: 10px; text-align: left;">OSPF mencari rute dengan total <i>Cost</i> terendah secara akumulatif berdasarkan <i>bandwidth</i>. Bukan sekadar jarak fisik terpendek. Makanya data muter lewat atas.</p>
+          </div>
+        </div>
+      </div>
+      <!-- ======================================================= -->
+
       <!-- Flashcards Q&A Routing -->
-      <h3 style="margin-top: 40px; color: var(--signal); font-family: var(--font-mono); font-size: .85rem; letter-spacing: .05em; text-transform: uppercase;">Interview Flashcards - Routing</h3>
+      <h3 style="margin-top: 40px; color: var(--signal); font-family: var(--font-mono); font-size: .85rem; letter-spacing: .05em; text-transform: uppercase;">Interview Flashcards - Routing Protocol</h3>
       <div class="qa-wrap">
+        <div class="qa-card">
+          <div class="qa-q">Apa perbedaan mendasar antara Static Route dan Dynamic Route?<span class="toggle-ic">+</span></div>
+          <div class="qa-a">
+            "Static routing is manually configured by a network administrator, while dynamic routing uses protocols (like OSPF or BGP) to automatically learn and update routing tables."
+            <p class="en">Versi Indonesia: Static route diisi manual satu-satu oleh admin. Kalau Dynamic route, router-router saling lapor status jaringan dan otomatis nyusun rute terbaiknya sendiri.</p>
+          </div>
+        </div>
+        <div class="qa-card">
+          <div class="qa-q">Kapan saat yang tepat menggunakan Static Route vs Dynamic Route?<span class="toggle-ic">+</span></div>
+          <div class="qa-a">
+            "Static routing is best for small, simple networks or for creating a default route to an ISP, because it consumes less CPU. Dynamic routing is better for large networks where paths can change frequently."
+            <p class="en">Versi Indonesia: Static enak buat jaringan kecil atau numpang jalan ke ISP karena nggak ngabisin CPU router. Kalau routernya banyak dan butuh jalur pindah otomatis kalau kabel putus, wajib pakai Dynamic.</p>
+          </div>
+        </div>
         <div class="qa-card">
           <div class="qa-q">Apa beda IGP dan EGP?<span class="toggle-ic">+</span></div>
           <div class="qa-a">
@@ -1045,17 +1237,24 @@ footer p{font-family:var(--font-mono);font-size:.76rem;color:var(--muted-dim);}
           </div>
         </div>
         <div class="qa-card">
-          <div class="qa-q">Kenapa OSPF disebut protokol Link-State?<span class="toggle-ic">+</span></div>
+          <div class="qa-q">Bagaimana cara OSPF memilih jalur memutar dibanding jalur lurus yang lambat?<span class="toggle-ic">+</span></div>
           <div class="qa-a">
-            "Because every router in a Link-State protocol has a complete map (topology) of the network. It calculates the shortest path independently using the Dijkstra algorithm based on link costs."
-            <p class="en">Versi Indonesia: Karena masing-masing router nyimpen peta lengkap (database topologi) seluruh jaringan. Jadi dia bisa milih rute paling hemat (Cost) secara cerdas.</p>
+            "Because OSPF selects the path with the lowest cumulative cost, not necessarily the physically shortest path. Cost is based on interface bandwidth."
+            <p class="en">Versi Indonesia: Karena OSPF mencari rute dengan total *Cost* terendah secara akumulatif berdasarkan *bandwidth*. Bukan sekadar memprioritaskan jarak fisik terpendek/lurus.</p>
           </div>
         </div>
         <div class="qa-card">
-          <div class="qa-q">Kapan sebaiknya pakai Static Route dibanding Dynamic Routing?<span class="toggle-ic">+</span></div>
+          <div class="qa-q">Apa itu Administrative Distance (AD)?<span class="toggle-ic">+</span></div>
           <div class="qa-a">
-            "Static routing is best for small, simple networks or for creating a default route to an ISP, because it consumes less CPU and memory. Dynamic routing is better for large networks where paths can change frequently."
-            <p class="en">Versi Indonesia: Static itu enak buat jaringan kecil atau cuma numpang gateway ke ISP karena nggak ngabisin memori CPU. Tapi kalau routernya banyak dan sering berubah, mending pakai dinamis (kayak OSPF) biar dia nyesuain otomatis.</p>
+            "Administrative Distance is the 'trustworthiness' of a routing protocol. The lower the AD value, the more trusted the route is. For example, a Directly Connected route has an AD of 0, Static Route has 1, and OSPF has 110."
+            <p class="en">Versi Indonesia: AD itu tingkat prioritas kepercayaan router terhadap suatu jalur. Makin kecil angkanya, makin dipilih duluan. Makanya router lebih milih jalur Static (AD 1) dibanding jalur OSPF (AD 110) kalau tujuannya sama.</p>
+          </div>
+        </div>
+        <div class="qa-card">
+          <div class="qa-q">Bagaimana cara membuat jalur backup otomatis menggunakan Static Route?<span class="toggle-ic">+</span></div>
+          <div class="qa-a">
+            "We can create a Floating Static Route by assigning an Administrative Distance (AD) that is higher than the primary route. If the primary route fails, the backup route with the higher AD will be injected into the routing table."
+            <p class="en">Versi Indonesia: Bikin dua rute ke tujuan yang sama. Rute utama (misal Kabel Fiber) dibikin biasa (AD 1). Rute cadangan (misal Radio) kita setting angka AD-nya jadi 10. Pas kabel fiber putus, router otomatis pindah ke jalur radio karena AD 1 hilang.</p>
           </div>
         </div>
       </div>
@@ -1063,9 +1262,9 @@ footer p{font-family:var(--font-mono);font-size:.76rem;color:var(--muted-dim);}
     </div>
   </section>
 
-  <!-- CONFIG / KAMUS CISCO -->
+  <!-- ==================== CONFIG / KAMUS CISCO ==================== -->
   <section class="sec" id="config">
-    <div class="container">
+    <div class="container" style="padding-top: 50px;">
       <div class="sec-head">
         <div class="eyebrow">06 — Dictionary / Kamus</div>
         <h2>Kamus Konfigurasi Cisco CLI (Copy-Paste Ready)</h2>
@@ -1396,90 +1595,100 @@ api     <span class="kw">IN</span>  <span class="kw">A</span>     <span class="s
     </div>
   </section>
 
-  <!-- GPON & FTTH -->
+  <!-- ==================== GPON & FTTH (TELKOM STANDARD) ==================== -->
   <section class="sec" id="gpon">
-    <div class="container">
+    <div class="container" style="padding-top: 50px;">
       <div class="sec-head">
         <div class="eyebrow">07 — Fiber to the Home</div>
-        <h2>GPON & FTTH (Arsitektur Fiber Optic)</h2>
-        <p class="en">"GPON (Gigabit Passive Optical Network) is the most common technology used for FTTH, delivering high-speed internet using fiber optics."</p>
+        <h2>GPON & FTTH (Arsitektur Telkom Indonesia)</h2>
+        <p class="en">"Topologi FTTH membagi 1 kabel fiber optic utama dari sentral menjadi banyak cabang menggunakan alat pembagi tanpa listrik (Passive Splitter) hingga sampai ke rumah pelanggan."</p>
       </div>
+      
+      <p style="color:var(--text); margin-bottom: 20px;">Bayangkan internet itu air bersih. Dari waduk utama <b>(STO)</b>, air dialirkan lewat pipa raksasa <b>(Kabel Feeder)</b>. Sampai di perempatan jalan, air dibagi ke pipa-pipa komplek <b>(ODC)</b>, lalu dipecah lagi di tiap tiang listrik depan gang <b>(ODP)</b>, sampai akhirnya masuk ke keran rumah kita <b>(ONT)</b> lewat pipa kecil hitam <b>(Drop Core)</b>.</p>
 
       <div class="topo-wrap">
-        <div class="topo-hint">Simulasi Topologi Fiber Optic Telkom Indonesia: STO → ODC → ODP → Rumah Pelanggan — klik perangkat untuk melihat perannya</div>
-        <svg viewBox="0 0 900 300" width="100%" id="gponSvg" class="interactive-topo">
+        <div class="topo-hint">Simulasi Topologi Fiber Optic Telkom Indonesia — klik perangkat untuk melihat perannya</div>
+        <svg viewBox="0 0 900 300" width="100%" class="interactive-topo">
+          <!-- Metro to OLT -->
+          <line x1="50" y1="140" x2="180" y2="140" class="cable" stroke="#4FD1C5" stroke-width="4"/>
           <!-- Feeder Cable: OLT -> ODC -->
-          <line x1="140" y1="140" x2="230" y2="140" class="cable" stroke="#4FD1C5" stroke-width="3"/>
+          <line x1="180" y1="140" x2="330" y2="140" class="cable" stroke="#c084fc" stroke-width="3"/>
           <!-- Distribution Cable: ODC -> ODP1 / ODP2 -->
-          <line x1="310" y1="140" x2="440" y2="70" class="cable" stroke="#4FD1C5" stroke-width="2"/>
-          <line x1="310" y1="140" x2="440" y2="220" class="cable" stroke="#4FD1C5" stroke-width="2"/>
+          <line x1="330" y1="140" x2="510" y2="70" class="cable" stroke="#c084fc" stroke-width="2"/>
+          <line x1="330" y1="140" x2="510" y2="220" class="cable" stroke="#c084fc" stroke-width="2"/>
           <!-- Drop Cable: ODP1 -> ONT A / B -->
-          <line x1="520" y1="60" x2="660" y2="30" class="cable" stroke="#F5A623" stroke-width="2"/>
-          <line x1="520" y1="80" x2="660" y2="105" class="cable" stroke="#F5A623" stroke-width="2"/>
+          <line x1="510" y1="60" x2="720" y2="30" class="cable" stroke="#F5A623" stroke-width="2"/>
+          <line x1="510" y1="80" x2="720" y2="105" class="cable" stroke="#F5A623" stroke-width="2"/>
           <!-- Drop Cable: ODP2 -> ONT C / D -->
-          <line x1="520" y1="210" x2="660" y2="185" class="cable" stroke="#F5A623" stroke-width="2"/>
-          <line x1="520" y1="230" x2="660" y2="260" class="cable" stroke="#F5A623" stroke-width="2"/>
+          <line x1="510" y1="210" x2="720" y2="185" class="cable" stroke="#F5A623" stroke-width="2"/>
+          <line x1="510" y1="230" x2="720" y2="260" class="cable" stroke="#F5A623" stroke-width="2"/>
 
           <!-- Light Pulses -->
-          <circle class="pkt" r="4" fill="#4FD1C5"><animateMotion dur="3s" repeatCount="indefinite" path="M140,140 L230,140 L310,140 L440,70 L520,60 L660,30"/></circle>
-          <circle class="pkt" r="4" fill="#4FD1C5"><animateMotion dur="3s" repeatCount="indefinite" path="M140,140 L230,140 L310,140 L440,70 L520,80 L660,105"/></circle>
-          <circle class="pkt" r="4" fill="#4FD1C5"><animateMotion dur="3s" repeatCount="indefinite" path="M140,140 L230,140 L310,140 L440,220 L520,210 L660,185"/></circle>
-          <circle class="pkt" r="4" fill="#4FD1C5"><animateMotion dur="3s" repeatCount="indefinite" path="M140,140 L230,140 L310,140 L440,220 L520,230 L660,260"/></circle>
+          <circle class="pkt" r="4" fill="#4FD1C5"><animateMotion dur="3s" repeatCount="indefinite" path="M50,140 L180,140 L330,140 L510,70 L720,30"/></circle>
+          <circle class="pkt" r="4" fill="#4FD1C5"><animateMotion dur="3s" repeatCount="indefinite" path="M50,140 L180,140 L330,140 L510,70 L720,105"/></circle>
+          <circle class="pkt" r="4" fill="#4FD1C5"><animateMotion dur="3s" repeatCount="indefinite" path="M50,140 L180,140 L330,140 L510,220 L720,185"/></circle>
+          <circle class="pkt" r="4" fill="#4FD1C5"><animateMotion dur="3s" repeatCount="indefinite" path="M50,140 L180,140 L330,140 L510,220 L720,260"/></circle>
+
+          <!-- METRO Node -->
+          <g class="node" data-id="topo_metro">
+            <rect x="10" y="110" width="70" height="60" rx="8" fill="#0F1A2E" stroke="#4FD1C5" stroke-width="2"/>
+            <text x="45" y="145" text-anchor="middle" class="nodelabel" fill="#fff">METRO</text>
+          </g>
 
           <!-- OLT / STO -->
           <g class="node" data-id="olt">
-            <rect x="60" y="110" width="80" height="60" rx="8" fill="#17233A" stroke="#c084fc" stroke-width="2"/>
-            <text x="100" y="145" text-anchor="middle" class="nodelabel" fill="#fff">OLT</text>
-            <text x="100" y="195" text-anchor="middle" class="nodelabel">STO (Central Office)</text>
+            <rect x="140" y="110" width="80" height="60" rx="8" fill="#17233A" stroke="#c084fc" stroke-width="2"/>
+            <text x="180" y="145" text-anchor="middle" class="nodelabel" fill="#fff">OLT</text>
+            <text x="180" y="195" text-anchor="middle" class="nodelabel">STO (Sentral)</text>
           </g>
 
           <!-- ODC -->
           <g class="node" data-id="odc">
-            <rect x="230" y="110" width="80" height="60" rx="8" fill="#0F1A2E" stroke="#4FD1C5" stroke-width="2"/>
-            <text x="270" y="140" text-anchor="middle" class="nodelabel" fill="#fff">ODC</text>
-            <text x="270" y="155" text-anchor="middle" class="nodelabel" style="font-size:9px">Splitter 1:4</text>
-            <text x="270" y="195" text-anchor="middle" class="nodelabel">Optical Distribution Cab.</text>
+            <rect x="290" y="110" width="80" height="60" rx="8" fill="#0F1A2E" stroke="#4FD1C5" stroke-width="2"/>
+            <text x="330" y="140" text-anchor="middle" class="nodelabel" fill="#fff">ODC</text>
+            <text x="330" y="155" text-anchor="middle" class="nodelabel" style="font-size:9px">Splitter 1:4</text>
+            <text x="330" y="195" text-anchor="middle" class="nodelabel">Kotak Pinggir Jalan</text>
           </g>
 
           <!-- ODP 1 -->
           <g class="node" data-id="odp1">
-            <rect x="440" y="45" width="80" height="50" rx="6" fill="#0F1A2E" stroke="#4FD1C5" stroke-width="2"/>
-            <text x="480" y="70" text-anchor="middle" class="nodelabel" fill="#fff">ODP-1</text>
-            <text x="480" y="83" text-anchor="middle" class="nodelabel" style="font-size:9px">Splitter 1:8</text>
-            <text x="480" y="112" text-anchor="middle" class="nodelabel">Tiang / Pole</text>
+            <rect x="470" y="45" width="80" height="50" rx="6" fill="#0F1A2E" stroke="#4FD1C5" stroke-width="2"/>
+            <text x="510" y="70" text-anchor="middle" class="nodelabel" fill="#fff">ODP-1</text>
+            <text x="510" y="83" text-anchor="middle" class="nodelabel" style="font-size:9px">Splitter 1:8</text>
+            <text x="510" y="112" text-anchor="middle" class="nodelabel">Kotak di Tiang</text>
           </g>
 
           <!-- ODP 2 -->
           <g class="node" data-id="odp2">
-            <rect x="440" y="195" width="80" height="50" rx="6" fill="#0F1A2E" stroke="#4FD1C5" stroke-width="2"/>
-            <text x="480" y="220" text-anchor="middle" class="nodelabel" fill="#fff">ODP-2</text>
-            <text x="480" y="233" text-anchor="middle" class="nodelabel" style="font-size:9px">Splitter 1:8</text>
-            <text x="480" y="262" text-anchor="middle" class="nodelabel">Tiang / Pole</text>
+            <rect x="470" y="195" width="80" height="50" rx="6" fill="#0F1A2E" stroke="#4FD1C5" stroke-width="2"/>
+            <text x="510" y="220" text-anchor="middle" class="nodelabel" fill="#fff">ODP-2</text>
+            <text x="510" y="233" text-anchor="middle" class="nodelabel" style="font-size:9px">Splitter 1:8</text>
+            <text x="510" y="262" text-anchor="middle" class="nodelabel">Kotak di Tiang</text>
           </g>
 
           <!-- ONT A -->
           <g class="node" data-id="ontA">
-            <rect x="660" y="15" width="55" height="30" rx="4" fill="#17233A" stroke="#F5A623" stroke-width="1.5"/>
-            <text x="687" y="34" text-anchor="middle" class="nodelabel">ONT</text>
-            <text x="687" y="60" text-anchor="middle" class="nodelabel">Rumah A</text>
+            <rect x="720" y="15" width="55" height="30" rx="4" fill="#17233A" stroke="#F5A623" stroke-width="1.5"/>
+            <text x="747" y="34" text-anchor="middle" class="nodelabel">ONT</text>
+            <text x="747" y="60" text-anchor="middle" class="nodelabel">Rumah A</text>
           </g>
           <!-- ONT B -->
           <g class="node" data-id="ontB">
-            <rect x="660" y="90" width="55" height="30" rx="4" fill="#17233A" stroke="#F5A623" stroke-width="1.5"/>
-            <text x="687" y="109" text-anchor="middle" class="nodelabel">ONT</text>
-            <text x="687" y="135" text-anchor="middle" class="nodelabel">Rumah B</text>
+            <rect x="720" y="90" width="55" height="30" rx="4" fill="#17233A" stroke="#F5A623" stroke-width="1.5"/>
+            <text x="747" y="109" text-anchor="middle" class="nodelabel">ONT</text>
+            <text x="747" y="135" text-anchor="middle" class="nodelabel">Rumah B</text>
           </g>
           <!-- ONT C -->
           <g class="node" data-id="ontC">
-            <rect x="660" y="170" width="55" height="30" rx="4" fill="#17233A" stroke="#F5A623" stroke-width="1.5"/>
-            <text x="687" y="189" text-anchor="middle" class="nodelabel">ONT</text>
-            <text x="687" y="215" text-anchor="middle" class="nodelabel">Rumah C</text>
+            <rect x="720" y="170" width="55" height="30" rx="4" fill="#17233A" stroke="#F5A623" stroke-width="1.5"/>
+            <text x="747" y="189" text-anchor="middle" class="nodelabel">ONT</text>
+            <text x="747" y="215" text-anchor="middle" class="nodelabel">Rumah C</text>
           </g>
           <!-- ONT D -->
           <g class="node" data-id="ontD">
-            <rect x="660" y="245" width="55" height="30" rx="4" fill="#17233A" stroke="#F5A623" stroke-width="1.5"/>
-            <text x="687" y="264" text-anchor="middle" class="nodelabel">ONT</text>
-            <text x="687" y="290" text-anchor="middle" class="nodelabel">Rumah D</text>
+            <rect x="720" y="245" width="55" height="30" rx="4" fill="#17233A" stroke="#F5A623" stroke-width="1.5"/>
+            <text x="747" y="264" text-anchor="middle" class="nodelabel">ONT</text>
+            <text x="747" y="290" text-anchor="middle" class="nodelabel">Rumah D</text>
           </g>
         </svg>
       </div>
@@ -1487,12 +1696,12 @@ api     <span class="kw">IN</span>  <span class="kw">A</span>     <span class="s
       <div class="device-panel">
         <div class="ph">Peran Perangkat Fiber Optic</div>
         <h4>Klik salah satu node di atas</h4>
-        <p class="placeholder dev-body">Pilih OLT, ODC, ODP, atau ONT pada diagram untuk melihat perannya dalam arsitektur Fiber to the Home ala Telkom Indonesia (STO → ODC → ODP → Rumah Pelanggan).</p>
+        <p class="placeholder dev-body">Pilih METRO, OLT, ODC, ODP, atau ONT pada diagram untuk melihat detail jalurnya.</p>
       </div>
 
       <div class="tip">
-        <div class="ic">TIP</div>
-        <div class="tx">Topologi ini adalah arsitektur standar Telkom Indonesia untuk FTTH: sinyal dari <b>OLT di STO</b> dipecah bertingkat — pertama di <b>ODC</b> (biasanya rasio 1:4 atau 1:8), lalu dipecah lagi di <b>ODP</b> (rasio 1:8 atau 1:16) yang letaknya paling dekat pelanggan (tiang/pedestal). Total rasio splitting end-to-end umumnya 1:32 atau 1:64. Pahami alur ini karena sering ditanya saat interview: "kalau 1 ODP down, dampaknya ke berapa pelanggan?"</div>
+        <div class="ic">TIP HR</div>
+        <div class="tx">Kalau ditanya <b>"Gimana urutan kabel Fiber Optic dari Telkom ke rumah pelanggan?"</b> Jawabannya: "Dari METRO Ethernet menuju OLT menggunakan <b>Kabel Patchcord/Uplink</b>. Dari OLT (STO) ke ODC menggunakan <b>Kabel Feeder</b>. Dari ODC ke ODP di tiang menggunakan <b>Kabel Distribusi</b>. Dari ODP ke dalam rumah ditarik menggunakan <b>Kabel Drop Core</b>. Dan terakhir, dihubungkan ke ONT/Modem menggunakan <b>Kabel Patchcord Kuning</b>."<br><br><span class="en">"It starts from the Metro network to the OLT via an Uplink Patchcord. From the OLT, it goes to the ODC using a Feeder Cable. Then, a Distribution Cable connects the ODC to the ODP on the pole. From the ODP, a Drop Core cable is pulled into the customer's house and connected to the ONT using a yellow Patchcord."</span></div>
       </div>
 
       <!-- Flashcards Q&A GPON -->
@@ -1517,11 +1726,732 @@ api     <span class="kw">IN</span>  <span class="kw">A</span>     <span class="s
     </div>
   </section>
 
-  <!-- HR & CULTURE FIT -->
-  <section class="sec" id="hr">
-    <div class="container">
+  <!-- ==================== NEW: TOPOLOGI ENTERPRISE + AP ==================== -->
+  <section class="sec" id="topologi">
+    <div class="container" style="padding-top: 50px;">
       <div class="sec-head">
-        <div class="eyebrow">08 — The Soft Skills</div>
+        <div class="eyebrow">08 — The Full Picture</div>
+        <h2>Topologi Jaringan Enterprise (Real-Case)</h2>
+        <p class="en">"A complete practical scenario combining OSPF, Inter-VLAN Routing, DHCP, NAT, Access Points, and Branch connectivity."</p>
+      </div>
+
+      <p style="color:var(--text); margin-bottom: 24px;">Ini adalah simulasi skenario nyata di dunia kerja. Terdapat <b>Kantor Pusat (HQ)</b> dan <b>Kantor Cabang (Branch)</b>. Keduanya dihubungkan oleh jalur WAN yang diatur oleh OSPF. Router Pusat (R1) menangani internet (NAT) dan memberikan IP otomatis (DHCP) ke PC serta Smartphone di ruangan via Access Point.</p>
+
+      <div class="topo-wrap">
+        <div class="topo-hint">Interactive Lab Topology — klik perangkat untuk penjelasan lengkap</div>
+        <svg viewBox="0 0 900 400" width="100%" class="interactive-topo">
+          <!-- ISP -->
+          <g class="node" data-id="topo_isp">
+            <ellipse cx="250" cy="40" rx="60" ry="20" fill="#17233A" stroke="#223049" stroke-width="2"/>
+            <text x="250" y="45" text-anchor="middle" class="nodelabel" fill="#fff">ISP / Internet</text>
+          </g>
+
+          <!-- Cables: ISP -> R1 -->
+          <line x1="250" y1="60" x2="250" y2="100" class="cable"/>
+
+          <!-- R1 HQ -->
+          <g class="node" data-id="topo_r1">
+            <rect x="210" y="100" width="80" height="40" rx="8" fill="#0F1A2E" stroke="#c084fc" stroke-width="2"/>
+            <text x="250" y="125" text-anchor="middle" class="nodelabel" fill="#fff">R1 (HQ)</text>
+            <text x="250" y="85" text-anchor="middle" class="nodelabel" fill="#5D7092">NAT, DHCP, RoaS</text>
+          </g>
+
+          <!-- R2 Branch -->
+          <g class="node" data-id="topo_r2">
+            <rect x="610" y="100" width="80" height="40" rx="8" fill="#0F1A2E" stroke="#c084fc" stroke-width="2"/>
+            <text x="650" y="125" text-anchor="middle" class="nodelabel" fill="#fff">R2 (Branch)</text>
+          </g>
+
+          <!-- Cable R1 to R2 (OSPF WAN) -->
+          <line x1="290" y1="120" x2="610" y2="120" class="cable" stroke-dasharray="5,5"/>
+          <text x="450" y="110" text-anchor="middle" class="nodelabel" fill="#c084fc">Link WAN (OSPF)</text>
+
+          <!-- Cables: Router to Switches -->
+          <line x1="250" y1="140" x2="250" y2="200" class="cable" stroke-dasharray="5,5"/> <!-- R1 to SW1 (Trunk) -->
+          <line x1="650" y1="140" x2="650" y2="200" class="cable" stroke-dasharray="5,5"/> <!-- R2 to SW2 (Trunk) -->
+
+          <!-- SW1 HQ -->
+          <g class="node" data-id="topo_sw1">
+            <rect x="210" y="200" width="80" height="30" rx="6" fill="#17233A" stroke="#223049" stroke-width="2"/>
+            <text x="250" y="220" text-anchor="middle" class="nodelabel" fill="#fff">SW1 (HQ)</text>
+          </g>
+
+          <!-- SW2 Branch -->
+          <g class="node" data-id="topo_sw2">
+            <rect x="610" y="200" width="80" height="30" rx="6" fill="#17233A" stroke="#223049" stroke-width="2"/>
+            <text x="650" y="220" text-anchor="middle" class="nodelabel" fill="#fff">SW2 (Branch)</text>
+          </g>
+
+          <!-- Cables: Switches to End Devices -->
+          <line x1="250" y1="230" x2="100" y2="300" class="cable"/> <!-- SW1 to PC1 -->
+          <line x1="250" y1="230" x2="250" y2="300" class="cable"/> <!-- SW1 to PC2 -->
+          <line x1="250" y1="230" x2="380" y2="280" class="cable"/> <!-- SW1 to AP -->
+          <line x1="650" y1="230" x2="650" y2="300" class="cable"/> <!-- SW2 to PC3 -->
+          
+          <!-- Wireless Signal (Dashed) -->
+          <path d="M 400 290 Q 430 280 460 295" fill="none" stroke="#F5A623" stroke-width="2" stroke-dasharray="4,4"/>
+
+          <!-- PC1 HQ IT -->
+          <g class="node" data-id="topo_pc1">
+            <circle cx="100" cy="300" r="20" fill="#0F1A2E" stroke="#4FD1C5" stroke-width="2"/>
+            <text x="100" y="335" text-anchor="middle" class="nodelabel">PC IT (VLAN 10)</text>
+          </g>
+
+          <!-- PC2 HQ Staff -->
+          <g class="node" data-id="topo_pc2">
+            <circle cx="250" cy="300" r="20" fill="#0F1A2E" stroke="#c084fc" stroke-width="2"/>
+            <text x="250" y="335" text-anchor="middle" class="nodelabel">PC Staff (VLAN 20)</text>
+          </g>
+
+          <!-- Access Point HQ -->
+          <g class="node" data-id="topo_ap">
+            <polygon points="380,270 400,300 360,300" fill="#0F1A2E" stroke="#F5A623" stroke-width="2"/>
+            <text x="380" y="325" text-anchor="middle" class="nodelabel">Access Point</text>
+          </g>
+
+          <!-- Smartphone HQ -->
+          <g class="node" data-id="topo_hp">
+            <rect x="460" y="280" width="20" height="30" rx="3" fill="#17233A" stroke="#F5A623" stroke-width="1.5"/>
+            <text x="470" y="325" text-anchor="middle" class="nodelabel">Smartphone (WiFi)</text>
+          </g>
+
+          <!-- PC3 Branch -->
+          <g class="node" data-id="topo_pc3">
+            <circle cx="650" cy="300" r="20" fill="#0F1A2E" stroke="#4FD1C5" stroke-width="2"/>
+            <text x="650" y="335" text-anchor="middle" class="nodelabel">PC Branch (VLAN 40)</text>
+          </g>
+          
+          <!-- Animated Packets -->
+          <!-- Packet: PC Branch (650,300) -> SW2 -> R2 -> R1 -> PC IT (100,300) -->
+          <circle r="4" fill="#c084fc" filter="drop-shadow(0 0 4px #c084fc)">
+             <animateMotion dur="6s" repeatCount="indefinite" path="M 650 300 L 650 230 L 650 140 L 250 120 L 250 200 L 100 300"/>
+          </circle>
+          <!-- Packet: Phone -> AP -> SW1 -> R1 -> ISP -->
+          <circle r="4" fill="#F5A623" filter="drop-shadow(0 0 4px #F5A623)">
+             <animateMotion dur="5s" repeatCount="indefinite" path="M 460 295 L 380 285 L 250 200 L 250 120 L 250 60 L 250 20"/>
+          </circle>
+        </svg>
+      </div>
+
+      <div class="device-panel">
+        <div class="ph">Peran Perangkat Jaringan</div>
+        <h4>Klik salah satu node di atas</h4>
+        <p class="placeholder dev-body">Pilih Router (R1/R2), Switch (SW1/SW2), Access Point, PC, atau ISP untuk melihat penjelasan fungsi masing-masing.</p>
+      </div>
+
+      <!-- Kode Konfigurasi Khusus Topologi Ini -->
+      <h3 style="margin-top: 40px; color: var(--text);">Langkah Konfigurasi (Termasuk Cabang & OSPF)</h3>
+      <div class="code-wrap" style="margin-bottom:34px;">
+        <div class="code-tabs">
+          <button class="active" data-code="tp-sw">1. Switch (VLAN HQ & Branch)</button>
+          <button data-code="tp-roas">2. Router (IP & RoaS)</button>
+          <button data-code="tp-ospf">3. Router (OSPF & DHCP)</button>
+          <button data-code="tp-nat">4. Router (NAT & Internet)</button>
+        </div>
+
+        <!-- 1. Switch VLAN -->
+        <div class="code-body active" data-body="tp-sw">
+          <div style="position:relative;">
+            <button class="copy-btn" data-copy>Copy</button>
+            <pre><code><span class="cm">! ===== DI SWITCH 1 (HQ) =====</span>
+<span class="kw">enable</span>
+<span class="kw">configure terminal</span>
+
+<span class="cm">! Bikin VLAN 10 (IT), 20 (Staff), dan 30 (WiFi/Guest)</span>
+<span class="kw">vlan</span> 10
+ <span class="kw">name</span> DEPT_IT
+<span class="kw">vlan</span> 20
+ <span class="kw">name</span> DEPT_STAFF
+<span class="kw">vlan</span> 30
+ <span class="kw">name</span> WIFI_GUEST
+<span class="kw">exit</span>
+
+<span class="cm">! Assign port akses ke PC dan AP</span>
+<span class="kw">interface range</span> FastEthernet 0/1 - 2
+ <span class="kw">switchport mode access</span>
+ <span class="kw">switchport access vlan</span> 10 <span class="cm">! (Fa0/1 untuk IT)</span>
+<span class="kw">interface</span> FastEthernet 0/3
+ <span class="kw">switchport mode access</span>
+ <span class="kw">switchport access vlan</span> 30 <span class="cm">! (Ke Access Point WiFi)</span>
+<span class="kw">exit</span>
+
+<span class="cm">! Port Gigabit ke Router R1 wajib TRUNK</span>
+<span class="kw">interface</span> GigabitEthernet 0/1
+ <span class="kw">switchport mode trunk</span>
+<span class="kw">exit</span>
+
+<span class="cm">! ===== DI SWITCH 2 (BRANCH) =====</span>
+<span class="kw">vlan</span> 40
+ <span class="kw">name</span> DEPT_BRANCH
+<span class="kw">exit</span>
+<span class="kw">interface</span> FastEthernet 0/1
+ <span class="kw">switchport mode access</span>
+ <span class="kw">switchport access vlan</span> 40
+<span class="kw">interface</span> GigabitEthernet 0/1
+ <span class="kw">switchport mode trunk</span></code></pre>
+          </div>
+        </div>
+
+        <!-- 2. Router IP & RoaS -->
+        <div class="code-body" data-body="tp-roas">
+          <div style="position:relative;">
+            <button class="copy-btn" data-copy>Copy</button>
+            <pre><code><span class="cm">! ===== DI ROUTER 1 (HQ) =====</span>
+<span class="kw">enable</span>
+<span class="kw">configure terminal</span>
+
+<span class="cm">! Port WAN Point-to-Point ke R2 (Cabang)</span>
+<span class="kw">interface</span> GigabitEthernet 0/2
+ <span class="kw">ip address</span> <span class="st">10.10.10.1 255.255.255.252</span>
+ <span class="kw">no shutdown</span>
+<span class="kw">exit</span>
+
+<span class="cm">! Port LAN arah Switch (Nyalakan fisik utama)</span>
+<span class="kw">interface</span> GigabitEthernet 0/1
+ <span class="kw">no shutdown</span>
+<span class="kw">exit</span>
+
+<span class="cm">! Sub-interface Gateway untuk VLAN lokal (RoaS)</span>
+<span class="kw">interface</span> GigabitEthernet 0/1.10
+ <span class="kw">encapsulation dot1Q</span> 10
+ <span class="kw">ip address</span> <span class="st">192.168.10.1 255.255.255.0</span>
+<span class="kw">interface</span> GigabitEthernet 0/1.30
+ <span class="kw">encapsulation dot1Q</span> 30
+ <span class="kw">ip address</span> <span class="st">192.168.30.1 255.255.255.0</span>
+<span class="kw">exit</span>
+
+<span class="cm">! ===== DI ROUTER 2 (BRANCH) =====</span>
+<span class="cm">! Konsepnya sama, pasang IP WAN arah R1 dan IP Sub-interface VLAN 40</span>
+<span class="kw">interface</span> GigabitEthernet 0/2
+ <span class="kw">ip address</span> <span class="st">10.10.10.2 255.255.255.252</span>
+ <span class="kw">no shutdown</span>
+<span class="kw">interface</span> GigabitEthernet 0/1.40
+ <span class="kw">encapsulation dot1Q</span> 40
+ <span class="kw">ip address</span> <span class="st">192.168.40.1 255.255.255.0</span></code></pre>
+          </div>
+        </div>
+
+        <!-- 3. OSPF & DHCP -->
+        <div class="code-body" data-body="tp-ospf">
+          <div style="position:relative;">
+            <button class="copy-btn" data-copy>Copy</button>
+            <pre><code><span class="cm">! ROUTING OSPF: Biar HQ dan Branch bisa saling PING (Saling kenal)</span>
+
+<span class="cm">! ===== DI ROUTER 1 (HQ) =====</span>
+<span class="kw">router ospf</span> 1
+ <span class="kw">network</span> <span class="st">192.168.10.0 0.0.0.255 area 0</span>  <span class="cm">! Iklankan VLAN 10</span>
+ <span class="kw">network</span> <span class="st">192.168.30.0 0.0.0.255 area 0</span>  <span class="cm">! Iklankan VLAN 30 WiFi</span>
+ <span class="kw">network</span> <span class="st">10.10.10.0 0.0.0.3 area 0</span>      <span class="cm">! Iklankan Jalur WAN ke R2</span>
+ <span class="kw">default-information originate</span>          <span class="cm">! Sebarkan pintu internet ke R2</span>
+<span class="kw">exit</span>
+
+<span class="cm">! ===== DI ROUTER 2 (BRANCH) =====</span>
+<span class="kw">router ospf</span> 1
+ <span class="kw">network</span> <span class="st">192.168.40.0 0.0.0.255 area 0</span>  <span class="cm">! Iklankan VLAN 40</span>
+ <span class="kw">network</span> <span class="st">10.10.10.0 0.0.0.3 area 0</span>      <span class="cm">! Iklankan Jalur WAN ke R1</span>
+<span class="kw">exit</span>
+
+<span class="cm">! ===== BIKIN DHCP SERVER DI ROUTER MASING-MASING =====</span>
+<span class="kw">ip dhcp pool</span> POOL_WIFI
+ <span class="kw">network</span> <span class="st">192.168.30.0 255.255.255.0</span>
+ <span class="kw">default-router</span> <span class="st">192.168.30.1</span>
+ <span class="kw">dns-server</span> <span class="st">8.8.8.8</span>
+<span class="kw">ip dhcp excluded-address</span> <span class="st">192.168.30.1</span></code></pre>
+          </div>
+        </div>
+
+        <!-- 4. NAT & ISP -->
+        <div class="code-body" data-body="tp-nat">
+          <div style="position:relative;">
+            <button class="copy-btn" data-copy>Copy</button>
+            <pre><code><span class="cm">! Konfigurasi Router 1 (HQ): NAT biar HQ dan Branch bisa internetan</span>
+<span class="kw">enable</span>
+<span class="kw">configure terminal</span>
+
+<span class="cm">! 1. Tentukan pintu KELUAR (ke arah ISP, misal port Gi0/0)</span>
+<span class="kw">interface</span> GigabitEthernet 0/0
+ <span class="kw">ip nat outside</span>
+<span class="kw">exit</span>
+
+<span class="cm">! 2. Tentukan pintu MASUK NAT (LAN lokal R1)</span>
+<span class="kw">interface</span> GigabitEthernet 0/1.10
+ <span class="kw">ip nat inside</span>
+<span class="kw">interface</span> GigabitEthernet 0/1.30
+ <span class="kw">ip nat inside</span>
+<span class="kw">exit</span>
+<span class="cm">! Tambahkan pintu masuk dari arah R2 (Jalur WAN)</span>
+<span class="kw">interface</span> GigabitEthernet 0/2
+ <span class="kw">ip nat inside</span>
+<span class="kw">exit</span>
+
+<span class="cm">! 3. Daftarkan semua IP yang boleh akses internet (Termasuk IP Branch)</span>
+<span class="kw">access-list</span> 1 <span class="kw">permit</span> <span class="st">192.168.10.0 0.0.0.255</span>
+<span class="kw">access-list</span> 1 <span class="kw">permit</span> <span class="st">192.168.30.0 0.0.0.255</span>
+<span class="kw">access-list</span> 1 <span class="kw">permit</span> <span class="st">192.168.40.0 0.0.0.255</span>
+
+<span class="cm">! 4. Eksekusi NAT Overload (PAT)</span>
+<span class="kw">ip nat inside source list</span> 1 <span class="kw">interface</span> GigabitEthernet 0/0 <span class="kw">overload</span>
+
+<span class="cm">! 5. Buat Default Route ke ISP</span>
+<span class="kw">ip route</span> <span class="st">0.0.0.0 0.0.0.0 200.1.1.1</span>
+
+<span class="kw">write memory</span></code></pre>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ==================== LINUX BASICS & DAILY USE ==================== -->
+  <section class="sec" id="linux">
+    <div class="container" style="padding-top: 50px;">
+      <div class="sec-head">
+        <div class="eyebrow">09 — The OS Tool</div>
+        <h2>Linux Basic & Penggunaan Sehari-hari</h2>
+        <p class="en">"Linux is everywhere. From web servers, android phones, to your smart TV. Knowing the basic commands makes you a versatile user."</p>
+      </div>
+
+      <p style="color:var(--text); margin-bottom: 24px;">Ini adalah *command* dasar Linux yang umum dipakai oleh siapa saja (bukan cuma IT). Cocok buat bikin tugas, atur file, atau ngecek komputer kalau lagi lemot.</p>
+
+      <div class="code-wrap" style="margin-bottom:34px;">
+        <div class="code-tabs">
+          <button class="active" data-code="lx-nav">Navigasi & File</button>
+          <button data-code="lx-sys">Sistem & Hardware</button>
+          <button data-code="lx-net">Jaringan & User</button>
+          <button data-code="lx-app">Install Aplikasi</button>
+        </div>
+
+        <!-- LINUX: NAVIGASI -->
+        <div class="code-body active" data-body="lx-nav">
+          <div class="mini-topo">
+            <div class="mt-node" style="color:var(--text)">pwd</div>
+            <div class="mt-line"><div class="mt-label">Cek Posisi</div></div>
+            <div class="mt-node">cd</div>
+            <div class="mt-line"><div class="mt-label">Pindah Folder</div></div>
+            <div class="mt-node" style="color:var(--alert)">rm -rf</div>
+          </div>
+          <div style="position:relative;">
+            <button class="copy-btn" data-copy>Copy</button>
+            <pre><code><span class="cm"># Ngecek posisi kita lagi di folder mana (Print Working Directory)</span>
+<span class="kw">pwd</span>
+
+<span class="cm"># Pindah ke folder Documents</span>
+<span class="kw">cd</span> /home/user/Documents
+
+<span class="cm"># Melihat isi daftar file di folder ini secara detail</span>
+<span class="kw">ls -la</span>
+
+<span class="cm"># Bikin folder baru namanya "Tugas_Kampus"</span>
+<span class="kw">mkdir</span> Tugas_Kampus
+
+<span class="cm"># Meng-copy file (cp) dan Memindahkan file (mv)</span>
+<span class="kw">cp</span> tugas1.txt tugas_backup.txt
+<span class="kw">mv</span> tugas1.txt Tugas_Kampus/
+
+<span class="cm"># Menghapus file biasa (rm) dan menghapus folder beserta isinya (rm -rf)</span>
+<span class="kw">rm</span> file_gak_penting.txt
+<span class="kw">rm -rf</span> Folder_Lama/  <span class="cm"># Awas! Perintah ini menghapus permanen tanpa nanya lagi</span></code></pre>
+          </div>
+        </div>
+
+        <!-- LINUX: SYSTEM -->
+        <div class="code-body" data-body="lx-sys">
+          <div class="mini-topo">
+            <div class="mt-node">htop</div>
+            <div class="mt-line"><div class="mt-label">RAM/CPU</div></div>
+            <div class="mt-node">df -h</div>
+            <div class="mt-line"><div class="mt-label">Harddisk</div></div>
+            <div class="mt-node" style="color:var(--muted)">reboot</div>
+          </div>
+          <div style="position:relative;">
+            <button class="copy-btn" data-copy>Copy</button>
+            <pre><code><span class="cm"># Komputer tiba-tiba lemot? Buka "Task Manager" versi Linux:</span>
+<span class="kw">top</span>     <span class="cm"># (Bawaan standar)</span>
+<span class="kw">htop</span>    <span class="cm"># (Versi lebih berwarna dan gampang dibaca, bisa kill program yang hang)</span>
+
+<span class="cm"># Mau download film tapi takut memori penuh? Cek sisa Harddisk/Flashdisk:</span>
+<span class="kw">df -h</span>   <span class="cm"># Huruf -h artinya "Human Readable", ukurannya gampang dibaca misal 20G, 500M</span>
+
+<span class="cm"># Ngecek sisa RAM yang kepakai</span>
+<span class="kw">free -m</span> <span class="cm"># Huruf -m artinya tampilkan dalam format Megabyte (MB)</span>
+
+<span class="cm"># Mematikan atau Me-restart Komputer/Server</span>
+<span class="kw">sudo reboot</span>       <span class="cm"># Restart komputer</span>
+<span class="kw">sudo shutdown now</span> <span class="cm"># Matikan komputer sekarang juga</span></code></pre>
+          </div>
+        </div>
+
+        <!-- LINUX: NETWORK & USER -->
+        <div class="code-body" data-body="lx-net">
+          <div class="mini-topo">
+            <div class="mt-node">ip a</div>
+            <div class="mt-line"><div class="mt-label">Cek IP</div></div>
+            <div class="mt-node">sudo</div>
+            <div class="mt-line"><div class="mt-label">Jadi Admin</div></div>
+            <div class="mt-node" style="color:var(--accent)">passwd</div>
+          </div>
+          <div style="position:relative;">
+            <button class="copy-btn" data-copy>Copy</button>
+            <pre><code><span class="cm"># ===== JARINGAN =====</span>
+<span class="cm"># Ngecek IP Address HP/Laptop lu (Dulu pakai ifconfig, sekarang udah jadul)</span>
+<span class="kw">ip a</span>
+
+<span class="cm"># Mengecek apakah koneksi internet dari terminal berjalan atau terblokir DNS-nya</span>
+<span class="cm"># Step 1: Ping IP langsung buat mastiin koneksi mentah</span>
+<span class="kw">ping</span> 8.8.8.8
+<span class="cm"># Step 2: Baru ping nama domain buat mastiin sistem DNS berfungsi</span>
+<span class="kw">ping</span> google.com
+
+<span class="cm"># Mendownload file langsung dari internet/URL</span>
+<span class="kw">wget</span> https://contoh.com/gambar_kucing.jpg
+
+<span class="cm"># ===== USER & HAK AKSES =====</span>
+<span class="cm"># Minjem kekuatan "Administrator" (Root) buat eksekusi perintah penting</span>
+<span class="kw">sudo</span> nama_perintah_yang_mau_dijalankan
+
+<span class="cm"># Mengganti password untuk akun lu sendiri</span>
+<span class="kw">passwd</span>
+
+<span class="cm"># Mengubah izin file (Misal bikin sebuah file script jadi bisa di double-click/jalankan)</span>
+<span class="kw">chmod +x</span> script_keren.sh</code></pre>
+          </div>
+        </div>
+
+        <!-- LINUX: APPS -->
+        <div class="code-body" data-body="lx-app">
+          <div class="mini-topo">
+            <div class="mt-node">apt update</div>
+            <div class="mt-line"><div class="mt-label">Refresh</div></div>
+            <div class="mt-node" style="color:var(--alert)">apt install</div>
+            <div class="mt-line"><div class="mt-label">Pasang</div></div>
+            <div class="mt-node" style="color:var(--accent)">systemctl</div>
+          </div>
+          <div style="position:relative;">
+            <button class="copy-btn" data-copy>Copy</button>
+            <pre><code><span class="cm"># Mengatur Aplikasi di Linux turunan Debian/Ubuntu</span>
+
+<span class="cm"># 1. Update daftar aplikasi terbaru dari internet (Wajib dilakukan pertama kali)</span>
+<span class="kw">sudo apt update</span>
+
+<span class="cm"># 2. Meng-install aplikasi baru (Misal install 'nano' untuk edit teks)</span>
+<span class="kw">sudo apt install</span> nano
+
+<span class="cm"># 3. Menghapus aplikasi yang udah gak kepakai</span>
+<span class="kw">sudo apt remove</span> nano
+
+<span class="cm"># MENGELOLA SERVICE (Aplikasi yang jalan di latar belakang)</span>
+<span class="cm"># Misal lu abis install Web Server (Apache) terus mau dihidupkan</span>
+<span class="kw">sudo systemctl start</span> apache2    <span class="cm"># Menyalakan</span>
+<span class="kw">sudo systemctl status</span> apache2   <span class="cm"># Mengecek apakah udah jalan normal</span>
+<span class="kw">sudo systemctl stop</span> apache2     <span class="cm"># Mematikan sementara</span></code></pre>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Flashcards Q&A Linux (General Version) -->
+      <h3 style="margin-top: 40px; color: var(--signal); font-family: var(--font-mono); font-size: .85rem; letter-spacing: .05em; text-transform: uppercase;">Interview Flashcards - Linux (Umum)</h3>
+      <div class="qa-wrap">
+        <div class="qa-card">
+          <div class="qa-q">Apa fungsi dari perintah 'sudo'?<span class="toggle-ic">+</span></div>
+          <div class="qa-a">
+            "<b>sudo</b> stands for 'superuser do'. It allows a normal user to temporarily execute a command with root (administrator) privileges."
+            <p class="en">Versi Indonesia: Sudo itu buat minjem kekuatan 'Admin/Root' sementara. Karena di Linux, kita nggak boleh jalanin kegiatan sehari-hari pakai akun Root demi alasan keamanan (takut salah hapus file sistem).</p>
+          </div>
+        </div>
+        <div class="qa-card">
+          <div class="qa-q">Apa bahayanya menjalankan perintah 'rm -rf /'?<span class="toggle-ic">+</span></div>
+          <div class="qa-a">
+            "The <code>rm -rf /</code> command will forcefully and recursively delete all files starting from the root directory. It will completely wipe out the operating system."
+            <p class="en">Versi Indonesia: Perintah ini bakal menghapus PAKSA semua isi memori komputer dari akar-akarnya tanpa ampun. Komputer bakalan langsung rusak/mati total.</p>
+          </div>
+        </div>
+        <div class="qa-card">
+          <div class="qa-q">Bagaimana urutan yang benar mengecek koneksi internet lewat terminal?<span class="toggle-ic">+</span></div>
+          <div class="qa-a">
+            "I would first test basic connectivity by pinging the gateway or a known public IP like <code>8.8.8.8</code>. If that succeeds, I would test DNS resolution by pinging a domain name like <code>google.com</code>. Finally, I use <code>curl</code> to test if the web application itself is responding."
+            <p class="en">Versi Indonesia: Jangan langsung ping Google. Langkah yang benar: Ping ke Gateway (cek LAN) -> Ping ke 8.8.8.8 (cek jalur Internet mentah) -> Ping ke google.com (cek apakah DNS berfungsi menerjemahkan nama ke IP) -> lalu pakai curl/buka browser untuk cek webnya (cek Layer 7).</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ==================== EXCEL & DATA DAILY ==================== -->
+  <section class="sec" id="excel">
+    <div class="container" style="padding-top: 50px;">
+      <div class="sec-head">
+        <div class="eyebrow">10 — The Universal Tool</div>
+        <h2>Excel Mastery (Penggunaan Sehari-hari)</h2>
+        <p class="en">"Excel is universally used across all professions. Mastering its basic formulas will save you hours of manual copy-pasting."</p>
+      </div>
+
+      <p style="color:var(--text); margin-bottom: 24px;">Apapun pekerjaan lu (Administrasi, Mahasiswa, atau Staff IT), lu wajib ngerti cara kerja rumus dasar Excel biar hidup lu lebih gampang pas disuruh bikin laporan.</p>
+
+      <div class="code-wrap" style="margin-bottom:34px;">
+        <div class="code-tabs">
+          <button class="active" data-code="ex-math">Matematika Dasar</button>
+          <button data-code="ex-logic">Logika (Lulus/Gagal)</button>
+          <button data-code="ex-lookup">Pencarian Data (VLOOKUP)</button>
+          <button data-code="ex-text">Atur Teks & Tanggal</button>
+        </div>
+
+        <!-- EXCEL: MATH -->
+        <div class="code-body active" data-body="ex-math">
+          <div style="position:relative;">
+            <button class="copy-btn" data-copy>Copy</button>
+            <pre><code><span class="cm"># MATEMATIKA & STATISTIK DASAR (Wajib hafal di luar kepala!)</span>
+
+<span class="cm"># Menjumlahkan total uang jajan dari baris A1 sampai A10</span>
+<span class="kw">=SUM(A1:A10)</span>
+
+<span class="cm"># Mencari rata-rata nilai ujian dari sel B1 sampai B5</span>
+<span class="kw">=AVERAGE(B1:B5)</span>
+
+<span class="cm"># Mencari Nilai Tertinggi (MAX) atau Terendah (MIN) di sebuah kelas</span>
+<span class="kw">=MAX(C:C)</span>
+<span class="kw">=MIN(C:C)</span>
+
+<span class="cm"># Menghitung ADA BERAPA BANYAK angka di sebuah kolom (Bukan menjumlahkan uangnya ya!)</span>
+<span class="kw">=COUNT(A1:A10)</span>
+
+<span class="cm"># Menghitung ADA BERAPA BANYAK teks/nama orang yang terisi (Tidak kosong)</span>
+<span class="kw">=COUNTA(A1:A10)</span></code></pre>
+          </div>
+        </div>
+
+        <!-- EXCEL: LOGIC -->
+        <div class="code-body" data-body="ex-logic">
+          <div style="position:relative;">
+            <button class="copy-btn" data-copy>Copy</button>
+            <pre><code><span class="cm"># LOGIKA IF (Sangat sering dipakai buat nentuin status lulus/gagal)</span>
+
+<span class="cm"># Kasus: Kolom B adalah Nilai Ujian. Kalau nilainya 75 ke atas, tulis "LULUS". Kalau di bawahnya tulis "REMEDIAL".</span>
+<span class="kw">=IF(B2 >= 75, "LULUS", "REMEDIAL")</span>
+
+<span class="cm"># MENGHITUNG DENGAN SYARAT (COUNTIF)</span>
+<span class="cm"># Kasus: Ada list absen 100 orang. Lu disuruh hitung berapa orang yang statusnya "Hadir".</span>
+<span class="kw">=COUNTIF(C:C, "Hadir")</span>
+
+<span class="cm"># MENJUMLAHKAN UANG DENGAN SYARAT (SUMIF)</span>
+<span class="cm"># Kasus: Ada kolom Tanggal, Status Transaksi, dan Harga. Lu mau jumlahkan total uang HANYA dari transaksi yang "Lunas".</span>
+<span class="kw">=SUMIF(Kolom_Status, "Lunas", Kolom_Harga)</span></code></pre>
+          </div>
+        </div>
+
+        <!-- EXCEL: LOOKUP -->
+        <div class="code-body" data-body="ex-lookup">
+          <div style="position:relative;">
+            <button class="copy-btn" data-copy>Copy</button>
+            <pre><code><span class="cm"># VLOOKUP: Mengambil data dari tabel lain biar gak capek copy-paste satu-satu.</span>
+
+<span class="cm"># Kasus: Lu punya form isian kasir. Kalau lu ngetik "Kode Barang" di sel A2, Excel otomatis ngisi "Nama Barang" dengan cara nyari ke tabel Katalog yang ada di Sheet lain.</span>
+
+<span class="cm"># Syntax Dasar:</span>
+<span class="kw">=VLOOKUP(Sel_Yang_Diketik, Blok_Tabel_Referensi, Nomor_Kolom_Hasil, FALSE)</span>
+
+<span class="cm"># Contoh Asli:</span>
+<span class="cm"># Cari kode dari sel A2 ke Sheet 'KatalogBarang' dari kolom A sampai C. Ambil tulisan di kolom ke-2. FALSE = Wajib sama persis.</span>
+<span class="kw">=VLOOKUP(A2, KatalogBarang!A:C, 2, FALSE)</span>
+
+<span class="cm"># BIAR GAK MUNCUL #N/A KALAU BARANGNYA GAK KETEMU (Pakai IFERROR)</span>
+<span class="kw">=IFERROR(VLOOKUP(A2, KatalogBarang!A:C, 2, FALSE), "Barang Kosong")</span></code></pre>
+          </div>
+        </div>
+
+        <!-- EXCEL: TEXT & DATE -->
+        <div class="code-body" data-body="ex-text">
+          <div style="position:relative;">
+            <button class="copy-btn" data-copy>Copy</button>
+            <pre><code><span class="cm"># MERAPIKAN TEKS</span>
+<span class="kw">=UPPER(A2)</span>   <span class="cm"># ngubah tulisan 'budi' jadi 'BUDI'</span>
+<span class="kw">=LOWER(A2)</span>   <span class="cm"># ngubah tulisan 'BUDI' jadi 'budi'</span>
+<span class="kw">=PROPER(A2)</span>  <span class="cm"># Huruf besar di awal kata: 'budi santoso' jadi 'Budi Santoso'</span>
+
+<span class="cm"># MENGGABUNGKAN KATA</span>
+<span class="cm"># Kalau A2 isinya "Budi" dan B2 isinya "Santoso", cara gabunginnya biar ada spasinya:</span>
+<span class="kw">=CONCATENATE(A2, " ", B2)</span>  
+<span class="cm"># ATAU pakai cara simpel:</span>
+<span class="kw">=A2 & " " & B2</span>
+
+<span class="cm"># TANGGAL OTOMATIS & HITUNG UMUR</span>
+<span class="kw">=TODAY()</span>  <span class="cm"># Otomatis ngisi tanggal hari ini saat file dibuka</span>
+<span class="kw">=NOW()</span>    <span class="cm"># Sama kayak TODAY tapi ada jam/waktunya</span>
+
+<span class="cm"># Hitung Umur orang dalam Tahun (Y = Years) dari tahun lahir di A2 ke hari ini</span>
+<span class="kw">=DATEDIF(A2, TODAY(), "Y")</span></code></pre>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Flashcards Q&A Excel -->
+      <h3 style="margin-top: 40px; color: var(--signal); font-family: var(--font-mono); font-size: .85rem; letter-spacing: .05em; text-transform: uppercase;">Interview Flashcards - Excel (Umum)</h3>
+      <div class="qa-wrap">
+        <div class="qa-card">
+          <div class="qa-q">Apa bedanya rumus COUNT dengan COUNTA?<span class="toggle-ic">+</span></div>
+          <div class="qa-a">
+            "<code>COUNT</code> only counts cells containing numbers. <code>COUNTA</code> counts cells containing any data type (numbers, text, or errors)."
+            <p class="en">Versi Indonesia: COUNT itu cuma buat ngitung jumlah sel yang isinya angka. Kalau COUNTA (Count All) bakal ngitung semua sel asal ada isinya (entah itu huruf, nama orang, atau tanda baca).</p>
+          </div>
+        </div>
+        <div class="qa-card">
+          <div class="qa-q">Kenapa rumus VLOOKUP sering menampilkan error #N/A?<span class="toggle-ic">+</span></div>
+          <div class="qa-a">
+            "It shows #N/A usually because the lookup value does not exist in the reference table, or the table range wasn't locked with absolute references ($)."
+            <p class="en">Versi Indonesia: Biasanya karena data yang dicari emang gak ada di tabel utamanya. Atau, karena blok tabel referensinya belum dikunci pakai tanda Dollar ($), jadi pas rumusnya ditarik ke bawah, tabelnya ikut geser.</p>
+          </div>
+        </div>
+        <div class="qa-card">
+          <div class="qa-q">Bagaimana cara mengatasi error #N/A agar tabel terlihat rapi?<span class="toggle-ic">+</span></div>
+          <div class="qa-a">
+            "I wrap the VLOOKUP formula inside an <code>IFERROR()</code> function. For example: <code>IFERROR(VLOOKUP(...), 'Not Found')</code>."
+            <p class="en">Versi Indonesia: Dibungkus pakai rumus IFERROR. Jadi kalau datanya gak ketemu, tulisan jelek #N/A bisa diganti otomatis jadi teks rapi seperti "Tidak Ada Data" atau sel kosong "".</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ==================== SQL BASICS (NEW ADDITION) ==================== -->
+  <section class="sec" id="sql">
+    <div class="container" style="padding-top: 50px;">
+      <div class="sec-head">
+        <div class="eyebrow">11 — The Data Foundation</div>
+        <h2>SQL & Database Basics</h2>
+        <p class="en">"SQL is the standard language for relational database management systems. It's a must-have skill for a Data Analyst."</p>
+      </div>
+
+      <p style="color:var(--text); margin-bottom: 24px;">Sebagai Data Analyst atau Engineer, lu bakal sering dihadapkan dengan <i>database</i> langsung. Menguasai SQL dasar adalah kewajiban mutlak buat narik data mentah (querying).</p>
+
+      <div class="code-wrap" style="margin-bottom:34px;">
+        <div class="code-tabs">
+          <button class="active" data-code="sq-basic">Basic Query</button>
+          <button data-code="sq-agg">Aggregasi (GROUP BY)</button>
+          <button data-code="sq-adv">Advanced Filter</button>
+          <button data-code="sq-rel">Relational (JOIN)</button>
+        </div>
+
+        <!-- SQL: BASIC -->
+        <div class="code-body active" data-body="sq-basic">
+          <div style="position:relative;">
+            <button class="copy-btn" data-copy>Copy</button>
+            <pre><code><span class="cm">-- Menampilkan semua kolom dari tabel pelanggan</span>
+<span class="kw">SELECT</span> * <span class="kw">FROM</span> pelanggan;
+
+<span class="cm">-- Filter data menggunakan WHERE</span>
+<span class="kw">SELECT</span> nama, area <span class="kw">FROM</span> pelanggan
+<span class="kw">WHERE</span> status = <span class="st">'Aktif'</span>;
+
+<span class="cm">-- Mengurutkan data (ORDER BY) dari yang terbesar ke terkecil</span>
+<span class="kw">SELECT</span> nama, tagihan <span class="kw">FROM</span> pelanggan
+<span class="kw">ORDER BY</span> tagihan <span class="kw">DESC</span>;</code></pre>
+          </div>
+        </div>
+
+        <!-- SQL: AGGREGASI -->
+        <div class="code-body" data-body="sq-agg">
+          <div style="position:relative;">
+            <button class="copy-btn" data-copy>Copy</button>
+            <pre><code><span class="cm">-- Merekap total order per STO (Central Office)</span>
+<span class="kw">SELECT</span> 
+    sto, 
+    <span class="kw">COUNT</span>(*) <span class="kw">AS</span> total_order 
+<span class="kw">FROM</span> orders 
+<span class="kw">GROUP BY</span> sto;
+
+<span class="cm">-- Menghitung total pendapatan (SUM) dan Rata-rata (AVG)</span>
+<span class="kw">SELECT</span> 
+    area, 
+    <span class="kw">SUM</span>(tagihan) <span class="kw">AS</span> total_pendapatan,
+    <span class="kw">AVG</span>(tagihan) <span class="kw">AS</span> rata_rata
+<span class="kw">FROM</span> billing
+<span class="kw">GROUP BY</span> area;
+
+<span class="cm">-- Menghitung jumlah pelanggan UNIK (Tidak ada duplikat)</span>
+<span class="kw">SELECT COUNT</span>(<span class="kw">DISTINCT</span> id_pelanggan) <span class="kw">FROM</span> orders;</code></pre>
+          </div>
+        </div>
+
+        <!-- SQL: ADVANCED FILTER -->
+        <div class="code-body" data-body="sq-adv">
+          <div style="position:relative;">
+            <button class="copy-btn" data-copy>Copy</button>
+            <pre><code><span class="cm">-- HAVING digunakan untuk memfilter hasil dari GROUP BY</span>
+<span class="kw">SELECT</span> sto, <span class="kw">COUNT</span>(*) <span class="kw">AS</span> total_order 
+<span class="kw">FROM</span> orders 
+<span class="kw">GROUP BY</span> sto 
+<span class="kw">HAVING COUNT</span>(*) > 100;
+
+<span class="cm">-- CASE WHEN: Membuat logika If-Else di SQL</span>
+<span class="kw">SELECT</span> nama, 
+    <span class="kw">CASE</span> 
+        <span class="kw">WHEN</span> tagihan > 500000 <span class="kw">THEN</span> <span class="st">'Premium'</span>
+        <span class="kw">ELSE</span> <span class="st">'Regular'</span> 
+    <span class="kw">END AS</span> tipe_pelanggan
+<span class="kw">FROM</span> pelanggan;
+
+<span class="cm">-- Menampilkan data yang kolom email-nya kosong (NULL)</span>
+<span class="kw">SELECT</span> * <span class="kw">FROM</span> pelanggan <span class="kw">WHERE</span> email <span class="kw">IS NULL</span>;</code></pre>
+          </div>
+        </div>
+
+        <!-- SQL: RELATIONAL -->
+        <div class="code-body" data-body="sq-rel">
+          <div style="position:relative;">
+            <button class="copy-btn" data-copy>Copy</button>
+            <pre><code><span class="cm">-- PRIMARY KEY: ID Unik di sebuah tabel (Misal: id_pelanggan)</span>
+<span class="cm">-- FOREIGN KEY: ID dari tabel lain yang dipakai sebagai penghubung</span>
+
+<span class="cm">-- INNER JOIN: Menggabungkan data dari 2 tabel yang saling berhubungan</span>
+<span class="kw">SELECT</span> 
+    pelanggan.nama, 
+    layanan.jenis_paket 
+<span class="kw">FROM</span> pelanggan
+<span class="kw">INNER JOIN</span> layanan 
+    <span class="kw">ON</span> pelanggan.id_layanan = layanan.id_layanan;</code></pre>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Flashcards Q&A SQL -->
+      <h3 style="margin-top: 40px; color: var(--signal); font-family: var(--font-mono); font-size: .85rem; letter-spacing: .05em; text-transform: uppercase;">Interview Flashcards - SQL</h3>
+      <div class="qa-wrap">
+        <div class="qa-card">
+          <div class="qa-q">What is the difference between WHERE and HAVING?<span class="toggle-ic">+</span></div>
+          <div class="qa-a">
+            "<code>WHERE</code> is used to filter records before any groupings are made, while <code>HAVING</code> is used to filter values after they have been grouped using aggregate functions."
+            <p class="en">Versi Indonesia: Secara gampang, <code>WHERE</code> dipakai untuk memfilter baris data asli *sebelum* di-grouping (nggak bisa pakai fungsi aggregasi kayak SUM/COUNT). Kalau <code>HAVING</code> dipakai untuk memfilter hasil *setelah* di-grouping (bisa memfilter hasil dari SUM/COUNT).</p>
+          </div>
+        </div>
+        <div class="qa-card">
+          <div class="qa-q">Jelaskan bedanya Primary Key dan Foreign Key.<span class="toggle-ic">+</span></div>
+          <div class="qa-a">
+            "A Primary Key uniquely identifies a record in a table. A Foreign Key is a field in one table that uniquely identifies a row of another table, linking the two tables together."
+            <p class="en">Versi Indonesia: Primary Key itu nomor identitas unik di tabel dia sendiri (misal NIK KTP). Foreign Key itu Primary Key dari tabel lain yang numpang di tabel ini biar kedua tabelnya bisa nyambung (JOIN).</p>
+          </div>
+        </div>
+        <div class="qa-card">
+          <div class="qa-q">Apa fungsi COUNT DISTINCT?<span class="toggle-ic">+</span></div>
+          <div class="qa-a">
+            "<code>COUNT DISTINCT</code> counts only the unique values in a column, ignoring duplicates."
+            <p class="en">Versi Indonesia: Beda sama <code>COUNT</code> biasa yang ngitung semua baris. <code>COUNT DISTINCT</code> cuma ngitung nilai yang unik (nggak dobel). Jadi kalau ada 1 pelanggan order 5 kali, di <code>COUNT</code> biasa dihitung 5, di <code>COUNT DISTINCT</code> cuma dihitung 1.</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ==================== HR & CULTURE FIT ==================== -->
+  <section class="sec" id="hr">
+    <div class="container" style="padding-top: 50px;">
+      <div class="sec-head">
+        <div class="eyebrow">12 — The Soft Skills</div>
         <h2>HR & Behavioral Interview Tips</h2>
         <p class="en">"Technical skills get you the interview, but soft skills get you the job."</p>
       </div>
@@ -1536,8 +2466,8 @@ api     <span class="kw">IN</span>  <span class="kw">A</span>     <span class="s
         <div class="qa-card">
           <div class="qa-q">Mengapa Anda tertarik bergabung dengan perusahaan ini?<span class="toggle-ic">+</span></div>
           <div class="qa-a">
-            Jawab dengan menonjolkan teknologi atau posisi market perusahaan, dikaitkan dengan pengalaman lu.<br><br>
-            <i class="en" style="display: block; margin-top: 8px;">"The company is a global leader in telecommunications equipment. Given my extensive background in GPON and handling multi-vendor configurations—including your ONTs—I want to take my career to the next level by working directly with the principal technology."</i>
+            Jawaban yang aman untuk industri teknologi secara general (jangan mengunci diri jadi *Network Engineer* terus):<br><br>
+            <i class="en" style="display: block; margin-top: 8px;">"I am drawn to this company because of its strong reputation in utilizing technology to drive solutions. Given my background in handling complex technical operations and troubleshooting, I want to leverage my analytical skills to contribute directly to your team's goals."</i>
           </div>
         </div>
         <div class="qa-card">
@@ -1559,7 +2489,7 @@ api     <span class="kw">IN</span>  <span class="kw">A</span>     <span class="s
           <div class="qa-q">Apa kelebihan dan kekurangan Anda?<span class="toggle-ic">+</span></div>
           <div class="qa-a">
             Pilih kelebihan yang relevan dengan ketelitian kerja provisioning, dan kekurangan yang jujur tapi sudah ada usaha perbaikannya (jangan jawab klise "saya perfeksionis").<br><br>
-            <i class="en" style="display: block; margin-top: 8px;">"My biggest strength is attention to detail — critical when provisioning ONTs or reading optical power values, since a small mistake can cause a customer complaint. As for a weakness, I used to rely too much on manual reporting, so I've been learning Python/Streamlit to automate it."</i>
+            <i class="en" style="display: block; margin-top: 8px;">"My biggest strength is attention to detail — critical when reading analytical data or technical values, since a small mistake can cause a larger issue. As for a weakness, I used to rely too much on manual reporting, so I've been learning Python/Streamlit to automate it."</i>
           </div>
         </div>
 
@@ -1598,16 +2528,16 @@ api     <span class="kw">IN</span>  <span class="kw">A</span>     <span class="s
         <div class="qa-card">
           <div class="qa-q">Apakah Anda bersedia bekerja shift, on-call, atau lembur jika terjadi gangguan mendadak?<span class="toggle-ic">+</span></div>
           <div class="qa-a">
-            Untuk posisi NOC/Network Engineer, kesediaan shift & standby itu wajib — tunjukkan lu paham konsekuensi kerjaan operasional 24/7.<br><br>
-            <i class="en" style="display: block; margin-top: 8px;">"Yes, I understand network operations require 24/7 availability. I'm used to shift work and being on standby for critical incidents, since customer connectivity issues can't wait until the next business day."</i>
+            Untuk posisi NOC/Network Engineer/IT Ops, kesediaan shift & standby itu wajib — tunjukkan lu paham konsekuensi kerjaan operasional 24/7.<br><br>
+            <i class="en" style="display: block; margin-top: 8px;">"Yes, I understand technical operations require 24/7 availability. I'm used to shift work and being on standby for critical incidents, since customer connectivity issues can't wait until the next business day."</i>
           </div>
         </div>
 
         <div class="qa-card">
           <div class="qa-q">Di mana Anda melihat diri Anda dalam 5 tahun ke depan?<span class="toggle-ic">+</span></div>
           <div class="qa-a">
-            Kaitkan dengan jenjang karir networking yang jelas (sertifikasi, posisi), tunjukkan lu punya rencana bukan cuma "ikut alur".<br><br>
-            <i class="en" style="display: block; margin-top: 8px;">"In five years, I see myself as a Senior Network Engineer or moving into a Network Analyst role, ideally certified in CCNP, with deeper expertise in network automation and design."</i>
+            Jawaban fleksibel (Bisa dipakai buat lamar Analis / Data / Jaringan):<br><br>
+            <i class="en" style="display: block; margin-top: 8px;">"In the next five years, I want to grow into a more senior technical role where I can combine my operational experience with data analysis, automation, and technology. I’m also open to developing deeper expertise based on the needs of the role and the company."</i>
           </div>
         </div>
       </div>
@@ -1625,7 +2555,52 @@ api     <span class="kw">IN</span>  <span class="kw">A</span>     <span class="s
 </div>
 
 <script>
-// ---- mobile menu JS ----
+// ---- JS LOGIC UNTUK SINGLE PAGE HIDE/SHOW ----
+function switchSection(hash) {
+  if(!hash || hash === '#') return;
+  
+  const targetId = hash.substring(1);
+  const targetSec = document.getElementById(targetId);
+  if(!targetSec) return;
+
+  // Sembunyikan semua section
+  document.querySelectorAll('main > section').forEach(sec => sec.classList.remove('active-sec'));
+  // Tampilkan target
+  targetSec.classList.add('active-sec');
+  
+  // Update menu active
+  document.querySelectorAll('#navlist a, .mobmenu a').forEach(link => link.classList.remove('active'));
+  document.querySelectorAll(`a[href="${hash}"]`).forEach(a => a.classList.add('active'));
+
+  // Scroll ke atas
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+document.querySelectorAll('#navlist a, .mobmenu a').forEach(link => {
+  link.addEventListener('click', (e) => {
+    e.preventDefault();
+    const hash = link.getAttribute('href');
+    switchSection(hash);
+    
+    // Tutup mobile menu
+    if(window.innerWidth <= 900) {
+        document.getElementById('mobMenu').classList.remove('open');
+        document.getElementById('menuBtn').textContent = '≡';
+    }
+  });
+});
+
+// Jalankan hero section di awal load
+switchSection('#hero');
+
+// ---- tombol klik langsung hero ----
+const btnMulai = document.getElementById('btnMulaiOsi');
+if(btnMulai) btnMulai.addEventListener('click', (e)=>{ e.preventDefault(); switchSection('#osi'); });
+
+const btnConfig = document.getElementById('btnLangsungConfig');
+if(btnConfig) btnConfig.addEventListener('click', (e)=>{ e.preventDefault(); switchSection('#config'); });
+
+// ---- mobile menu toggle ----
 const menuBtn=document.getElementById('menuBtn');
 const mobMenu=document.getElementById('mobMenu');
 if(menuBtn){
@@ -1633,24 +2608,7 @@ if(menuBtn){
     mobMenu.classList.toggle('open');
     menuBtn.textContent = mobMenu.classList.contains('open') ? '×' : '≡';
   });
-  mobMenu.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{
-    mobMenu.classList.remove('open'); menuBtn.textContent='≡';
-  }));
 }
-
-// ---- active nav highlight ----
-const navLinks=document.querySelectorAll('#navlist a');
-const sections=document.querySelectorAll('section[id]');
-const obs=new IntersectionObserver((entries)=>{
-  entries.forEach(e=>{
-    if(e.isIntersecting){
-      navLinks.forEach(l=>l.classList.remove('active'));
-      const link=document.querySelector('#navlist a[data-sec="'+e.target.id+'"]');
-      if(link) link.classList.add('active');
-    }
-  });
-},{rootMargin:'-40% 0px -50% 0px'});
-sections.forEach(s=>obs.observe(s));
 
 // ---- OSI accordion ----
 document.querySelectorAll('.osi-head').forEach(head=>{
@@ -1659,41 +2617,49 @@ document.querySelectorAll('.osi-head').forEach(head=>{
   });
 });
 
-// ---- Q&A Flashcards Accordion (NEW) ----
+// ---- Q&A Flashcards Accordion ----
 document.querySelectorAll('.qa-card').forEach(card=>{
   card.addEventListener('click', () => {
     card.classList.toggle('open');
   });
 });
 
-// ---- protocol tabs ----
-document.querySelectorAll('#protoTabs .tabbtn').forEach(btn=>{
+// ---- protocol tabs (Routing) ----
+document.querySelectorAll('.tabbar .tabbtn').forEach(btn=>{
   btn.addEventListener('click',()=>{
-    document.querySelectorAll('#protoTabs .tabbtn').forEach(b=>b.classList.remove('active'));
-    document.querySelectorAll('.tabpanel').forEach(p=>p.classList.remove('active'));
+    const wrap = btn.closest('.sec');
+    if(!wrap) return;
+    wrap.querySelectorAll('.tabbtn').forEach(b=>b.classList.remove('active'));
+    wrap.querySelectorAll('.tabpanel').forEach(p=>p.classList.remove('active'));
     btn.classList.add('active');
-    document.querySelector('.tabpanel[data-panel="'+btn.dataset.tab+'"]').classList.add('active');
+    const targetPanel = wrap.querySelector(`.tabpanel[data-panel="${btn.dataset.tab}"]`);
+    if(targetPanel) targetPanel.classList.add('active');
   });
 });
 
-// ---- config tabs ----
-document.querySelectorAll('#codeTabs button').forEach(btn=>{
-  btn.addEventListener('click',()=>{
-    document.querySelectorAll('#codeTabs button').forEach(b=>b.classList.remove('active'));
-    document.querySelectorAll('.code-body').forEach(p=>p.classList.remove('active'));
+// ---- config tabs (Code Snippets) ----
+document.querySelectorAll('.code-tabs button').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const wrap = btn.closest('.code-wrap');
+    if(!wrap) return;
+    wrap.querySelectorAll('.code-tabs button').forEach(b => b.classList.remove('active'));
+    wrap.querySelectorAll('.code-body').forEach(p => p.classList.remove('active'));
     btn.classList.add('active');
-    document.querySelector('.code-body[data-body="'+btn.dataset.code+'"]').classList.add('active');
+    const targetBody = wrap.querySelector(`.code-body[data-body="${btn.dataset.code}"]`);
+    if(targetBody) targetBody.classList.add('active');
   });
 });
 
 // ---- copy buttons ----
-document.querySelectorAll('[data-copy]').forEach(btn=>{
+document.querySelectorAll('.copy-btn').forEach(btn=>{
   btn.addEventListener('click',()=>{
-    const code=btn.parentElement.querySelector('code').innerText;
-    navigator.clipboard.writeText(code).then(()=>{
-      const old=btn.textContent; btn.textContent='Copied!';
-      setTimeout(()=>btn.textContent=old,1500);
-    }).catch(()=>{btn.textContent='Gagal';});
+    const preElement = btn.nextElementSibling;
+    if(preElement) {
+      navigator.clipboard.writeText(preElement.innerText).then(()=>{
+        const old=btn.textContent; btn.textContent='Copied!';
+        setTimeout(()=>btn.textContent=old,1500);
+      }).catch(()=>{btn.textContent='Gagal';});
+    }
   });
 });
 
@@ -1714,7 +2680,18 @@ const deviceInfo={
   ontA:{title:'ONT (Modem Pelanggan) — Rumah A',body:'Perangkat di sisi pelanggan (Customer Premises Equipment) yang mengubah sinyal optik dari Kabel Drop menjadi sinyal ethernet agar bisa dipakai router/PC. Setiap ONT diregistrasi unik di OLT lewat serial number saat proses provisioning.'},
   ontB:{title:'ONT (Modem Pelanggan) — Rumah B',body:'Satu port di ODP hanya melayani satu ONT/pelanggan. Kalau LOS menyala di ONT ini, kemungkinan penyebabnya ada di segmen Kabel Drop antara ODP dan rumah, bukan di jalur OLT/ODC yang dipakai bersama pelanggan lain.'},
   ontC:{title:'ONT (Modem Pelanggan) — Rumah C',body:'Terhubung ke ODP-2 yang berbeda dari Rumah A/B. Kalau ada gangguan massal yang hanya berdampak ke Rumah C & D tapi tidak ke A & B, itu indikasi kuat masalahnya ada di ODP-2 atau kabel distribusinya, bukan di OLT.'},
-  ontD:{title:'ONT (Modem Pelanggan) — Rumah D',body:'ONT mengirim laporan level daya optik (RX Power) yang bisa dipantau OLT/NMS secara remote. Nilai RX Power yang terlalu redup (misal di bawah -27 dBm) biasanya jadi indikator awal sebelum pelanggan benar-benar mengalami LOS total.'}
+  ontD:{title:'ONT (Modem Pelanggan) — Rumah D',body:'ONT mengirim laporan level daya optik (RX Power) yang bisa dipantau OLT/NMS secara remote. Nilai RX Power yang terlalu redup (misal di bawah -27 dBm) biasanya jadi indikator awal sebelum pelanggan benar-benar mengalami LOS total.'},
+  topo_metro:{title:'METRO Ethernet',body:'Jaringan inti backbone provider Telkom yang terhubung langsung ke Internet pusat. Bertugas mengalirkan traffic kapasitas raksasa ke masing-masing STO/OLT di tiap wilayah.'},
+  topo_isp:{title:'ISP / Internet',body:'Gerbang menuju internet global. Di skenario riil, Core Router kita diarahkan ke sini menggunakan Default Route (0.0.0.0/0).'},
+  topo_r1:{title:'Core Router R1 (HQ)',body:'Router utama di kantor pusat. Menjalankan peran krusial: 1) Menyediakan IP otomatis (DHCP Server), 2) Menjembatani antar VLAN (Router on a Stick), 3) Mentranslasikan IP Lokal ke Publik (NAT) agar PC bisa berinternet, dan 4) Bertukar rute OSPF dengan router cabang.'},
+  topo_r2:{title:'Router R2 (Branch)',body:'Router di kantor cabang. Berkomunikasi dengan Router HQ menggunakan protokol OSPF lewat jalur WAN, sehingga jaringan cabang bisa terkoneksi dengan pusat secara otomatis.'},
+  topo_sw1:{title:'Switch SW1 (HQ)',body:'Membagi koneksi ke end-user di pusat. Port yang mengarah ke Router disetting sebagai Trunk (membawa VLAN 10, 20, 30), sedangkan port ke arah PC/AP disetting sebagai Access Port.'},
+  topo_sw2:{title:'Switch SW2 (Branch)',body:'Switch cabang yang meneruskan koneksi dari Router R2 ke PC end-user cabang menggunakan pengaturan VLAN (VLAN 40).'},
+  topo_pc1:{title:'PC IT (VLAN 10)',body:'Mendapat IP otomatis dari rentang DHCP Router. Walaupun secara fisik terhubung ke switch yang sama dengan PC Staff, broadcast datanya terisolasi secara logis berkat VLAN.'},
+  topo_pc2:{title:'PC Staff (VLAN 20)',body:'Mendapat IP otomatis dari rentang DHCP Router yang berbeda jaringan dengan PC IT. Butuh bantuan routing dari Core Router jika ingin mengirim ping ke PC IT.'},
+  topo_pc3:{title:'PC Cabang (VLAN 40)',body:'Komputer di kantor cabang. Karena menggunakan dynamic routing OSPF, PC ini bisa melakukan PING melintasi jaringan WAN sampai ke PC IT di kantor pusat.'},
+  topo_ap:{title:'Access Point (WiFi)',body:'Disetting masuk ke VLAN 30 (Guest/WiFi). AP ini memancarkan sinyal internet nirkabel ke HP/Laptop, tapi secara sistem ia hanya kepanjangan tangan dari kabel Switch.'},
+  topo_hp:{title:'Smartphone (Wireless)',body:'Terhubung tanpa kabel ke AP. Walau lewat udara, secara sistem HP ini mendapat jatah IP DHCP dari Router, sama persis seperti PC yang dicolok kabel.'}
 };
 
 document.querySelectorAll('svg.interactive-topo').forEach(svg => {
@@ -1728,13 +2705,17 @@ document.querySelectorAll('svg.interactive-topo').forEach(svg => {
       const info = deviceInfo[n.dataset.id];
       
       // Cari panel yang posisinya persis setelah topo-wrap SVG ini
-      const panel = svg.parentElement.nextElementSibling;
+      const topoWrap = svg.closest('.topo-wrap');
+      const panel = topoWrap ? topoWrap.nextElementSibling : null;
+      
       if (panel && panel.classList.contains('device-panel') && info) {
         const titleEl = panel.querySelector('h4');
         const bodyEl = panel.querySelector('.dev-body');
-        titleEl.textContent = info.title;
-        bodyEl.textContent = info.body;
-        bodyEl.classList.remove('placeholder');
+        if(titleEl) titleEl.textContent = info.title;
+        if(bodyEl) {
+            bodyEl.textContent = info.body;
+            bodyEl.classList.remove('placeholder');
+        }
       }
     });
   });
