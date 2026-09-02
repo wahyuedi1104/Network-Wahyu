@@ -1607,96 +1607,97 @@ api     <span class="kw">IN</span>  <span class="kw">A</span>     <span class="s
       <p style="color:var(--text); margin-bottom: 20px;">Bayangkan internet itu air bersih. Dari waduk utama <b>(STO)</b>, air dialirkan lewat pipa raksasa <b>(Kabel Feeder)</b>. Sampai di perempatan jalan, air dibagi ke pipa-pipa komplek <b>(ODC)</b>, lalu dipecah lagi di tiap tiang listrik depan gang <b>(ODP)</b>, sampai akhirnya masuk ke keran rumah kita <b>(ONT)</b> lewat pipa kecil hitam <b>(Drop Core)</b>.</p>
 
       <div class="topo-wrap">
-        <div class="topo-hint">Simulasi Topologi Fiber Optic Telkom Indonesia — klik perangkat untuk melihat perannya</div>
-        <svg viewBox="0 0 900 300" width="100%" class="interactive-topo">
-          <!-- Metro to OLT -->
-          <line x1="50" y1="140" x2="180" y2="140" class="cable" stroke="#4FD1C5" stroke-width="4"/>
-          <!-- Feeder Cable: OLT -> ODC -->
-          <line x1="180" y1="140" x2="330" y2="140" class="cable" stroke="#c084fc" stroke-width="3"/>
-          <!-- Distribution Cable: ODC -> ODP1 / ODP2 -->
-          <line x1="330" y1="140" x2="510" y2="70" class="cable" stroke="#c084fc" stroke-width="2"/>
-          <line x1="330" y1="140" x2="510" y2="220" class="cable" stroke="#c084fc" stroke-width="2"/>
-          <!-- Drop Cable: ODP1 -> ONT A / B -->
-          <line x1="510" y1="60" x2="720" y2="30" class="cable" stroke="#F5A623" stroke-width="2"/>
-          <line x1="510" y1="80" x2="720" y2="105" class="cable" stroke="#F5A623" stroke-width="2"/>
-          <!-- Drop Cable: ODP2 -> ONT C / D -->
-          <line x1="510" y1="210" x2="720" y2="185" class="cable" stroke="#F5A623" stroke-width="2"/>
-          <line x1="510" y1="230" x2="720" y2="260" class="cable" stroke="#F5A623" stroke-width="2"/>
+        <div class="topo-hint">Simulasi Topologi End-to-End FTTH (ISP ke Pelanggan) — klik perangkat untuk melihat perannya</div>
+        <div style="overflow-x: auto; padding-bottom: 15px;">
+          <svg viewBox="0 0 1100 200" width="100%" class="interactive-topo" style="min-width: 1000px;">
+            <!-- CABLES -->
+            <!-- Backbone / Metro (Ungu) -->
+            <line x1="70" y1="80" x2="565" y2="80" class="cable" stroke="#c084fc" stroke-width="3"/>
+            <!-- Fiber GPON (Cyan) -->
+            <line x1="565" y1="80" x2="925" y2="80" class="cable" stroke="#4FD1C5" stroke-width="3"/>
+            <!-- LAN / Drop (Orange) -->
+            <line x1="925" y1="80" x2="1015" y2="80" class="cable" stroke="#F5A623" stroke-width="2" stroke-dasharray="4,4"/>
 
-          <!-- Light Pulses -->
-          <circle class="pkt" r="4" fill="#4FD1C5"><animateMotion dur="3s" repeatCount="indefinite" path="M50,140 L180,140 L330,140 L510,70 L720,30"/></circle>
-          <circle class="pkt" r="4" fill="#4FD1C5"><animateMotion dur="3s" repeatCount="indefinite" path="M50,140 L180,140 L330,140 L510,70 L720,105"/></circle>
-          <circle class="pkt" r="4" fill="#4FD1C5"><animateMotion dur="3s" repeatCount="indefinite" path="M50,140 L180,140 L330,140 L510,220 L720,185"/></circle>
-          <circle class="pkt" r="4" fill="#4FD1C5"><animateMotion dur="3s" repeatCount="indefinite" path="M50,140 L180,140 L330,140 L510,220 L720,260"/></circle>
+            <!-- ANIMATED PACKETS -->
+            <circle class="pkt" r="4" fill="#4FD1C5">
+               <animateMotion dur="4s" repeatCount="indefinite" path="M70,80 L1015,80"/>
+            </circle>
 
-          <!-- METRO Node -->
-          <g class="node" data-id="topo_metro">
-            <rect x="10" y="110" width="70" height="60" rx="8" fill="#0F1A2E" stroke="#4FD1C5" stroke-width="2"/>
-            <text x="45" y="145" text-anchor="middle" class="nodelabel" fill="#fff">METRO</text>
-          </g>
+            <!-- 1. Internet / Peering -->
+            <g class="node" data-id="topo_internet">
+              <ellipse cx="70" cy="80" rx="45" ry="25" fill="#17233A" stroke="#223049" stroke-width="2"/>
+              <text x="70" y="84" text-anchor="middle" class="nodelabel" fill="#fff">Internet</text>
+              <text x="70" y="120" text-anchor="middle" class="nodelabel" fill="#5D7092">Peering/DC</text>
+            </g>
+            
+            <!-- 2. CORE -->
+            <g class="node" data-id="topo_core">
+              <rect x="150" y="60" width="50" height="40" rx="6" fill="#0F1A2E" stroke="#c084fc" stroke-width="2"/>
+              <text x="175" y="84" text-anchor="middle" class="nodelabel" fill="#fff">CORE</text>
+            </g>
+            
+            <!-- 3. IP/MPLS Backbone -->
+            <g class="node" data-id="topo_mpls">
+              <ellipse cx="270" cy="80" rx="45" ry="25" fill="#17233A" stroke="#c084fc" stroke-width="2"/>
+              <text x="270" y="84" text-anchor="middle" class="nodelabel" fill="#fff">IP/MPLS</text>
+            </g>
+            
+            <!-- 4. Aggregation -->
+            <g class="node" data-id="topo_agg">
+              <rect x="345" y="60" width="50" height="40" rx="6" fill="#0F1A2E" stroke="#c084fc" stroke-width="2"/>
+              <text x="370" y="84" text-anchor="middle" class="nodelabel" fill="#fff">Agg</text>
+            </g>
 
-          <!-- OLT / STO -->
-          <g class="node" data-id="olt">
-            <rect x="140" y="110" width="80" height="60" rx="8" fill="#17233A" stroke="#c084fc" stroke-width="2"/>
-            <text x="180" y="145" text-anchor="middle" class="nodelabel" fill="#fff">OLT</text>
-            <text x="180" y="195" text-anchor="middle" class="nodelabel">STO (Sentral)</text>
-          </g>
+            <!-- 5. METRO-E -->
+            <g class="node" data-id="topo_metro_e">
+              <rect x="440" y="60" width="60" height="40" rx="6" fill="#0F1A2E" stroke="#c084fc" stroke-width="2"/>
+              <text x="470" y="84" text-anchor="middle" class="nodelabel" fill="#fff">Metro-E</text>
+            </g>
 
-          <!-- ODC -->
-          <g class="node" data-id="odc">
-            <rect x="290" y="110" width="80" height="60" rx="8" fill="#0F1A2E" stroke="#4FD1C5" stroke-width="2"/>
-            <text x="330" y="140" text-anchor="middle" class="nodelabel" fill="#fff">ODC</text>
-            <text x="330" y="155" text-anchor="middle" class="nodelabel" style="font-size:9px">Splitter 1:4</text>
-            <text x="330" y="195" text-anchor="middle" class="nodelabel">Kotak Pinggir Jalan</text>
-          </g>
+            <!-- 6. OLT -->
+            <g class="node" data-id="topo_olt">
+              <rect x="540" y="60" width="50" height="40" rx="6" fill="#17233A" stroke="#4FD1C5" stroke-width="2"/>
+              <text x="565" y="84" text-anchor="middle" class="nodelabel" fill="#fff">OLT</text>
+            </g>
 
-          <!-- ODP 1 -->
-          <g class="node" data-id="odp1">
-            <rect x="470" y="45" width="80" height="50" rx="6" fill="#0F1A2E" stroke="#4FD1C5" stroke-width="2"/>
-            <text x="510" y="70" text-anchor="middle" class="nodelabel" fill="#fff">ODP-1</text>
-            <text x="510" y="83" text-anchor="middle" class="nodelabel" style="font-size:9px">Splitter 1:8</text>
-            <text x="510" y="112" text-anchor="middle" class="nodelabel">Kotak di Tiang</text>
-          </g>
+            <!-- 7. ODF -->
+            <g class="node" data-id="topo_odf">
+              <rect x="630" y="60" width="40" height="40" rx="4" fill="#0F1A2E" stroke="#4FD1C5" stroke-width="2"/>
+              <text x="650" y="84" text-anchor="middle" class="nodelabel" fill="#fff">ODF</text>
+            </g>
 
-          <!-- ODP 2 -->
-          <g class="node" data-id="odp2">
-            <rect x="470" y="195" width="80" height="50" rx="6" fill="#0F1A2E" stroke="#4FD1C5" stroke-width="2"/>
-            <text x="510" y="220" text-anchor="middle" class="nodelabel" fill="#fff">ODP-2</text>
-            <text x="510" y="233" text-anchor="middle" class="nodelabel" style="font-size:9px">Splitter 1:8</text>
-            <text x="510" y="262" text-anchor="middle" class="nodelabel">Kotak di Tiang</text>
-          </g>
+            <!-- 8. ODC -->
+            <g class="node" data-id="topo_odc_new">
+              <rect x="715" y="60" width="40" height="40" rx="4" fill="#0F1A2E" stroke="#4FD1C5" stroke-width="2"/>
+              <text x="735" y="84" text-anchor="middle" class="nodelabel" fill="#fff">ODC</text>
+            </g>
 
-          <!-- ONT A -->
-          <g class="node" data-id="ontA">
-            <rect x="720" y="15" width="55" height="30" rx="4" fill="#17233A" stroke="#F5A623" stroke-width="1.5"/>
-            <text x="747" y="34" text-anchor="middle" class="nodelabel">ONT</text>
-            <text x="747" y="60" text-anchor="middle" class="nodelabel">Rumah A</text>
-          </g>
-          <!-- ONT B -->
-          <g class="node" data-id="ontB">
-            <rect x="720" y="90" width="55" height="30" rx="4" fill="#17233A" stroke="#F5A623" stroke-width="1.5"/>
-            <text x="747" y="109" text-anchor="middle" class="nodelabel">ONT</text>
-            <text x="747" y="135" text-anchor="middle" class="nodelabel">Rumah B</text>
-          </g>
-          <!-- ONT C -->
-          <g class="node" data-id="ontC">
-            <rect x="720" y="170" width="55" height="30" rx="4" fill="#17233A" stroke="#F5A623" stroke-width="1.5"/>
-            <text x="747" y="189" text-anchor="middle" class="nodelabel">ONT</text>
-            <text x="747" y="215" text-anchor="middle" class="nodelabel">Rumah C</text>
-          </g>
-          <!-- ONT D -->
-          <g class="node" data-id="ontD">
-            <rect x="720" y="245" width="55" height="30" rx="4" fill="#17233A" stroke="#F5A623" stroke-width="1.5"/>
-            <text x="747" y="264" text-anchor="middle" class="nodelabel">ONT</text>
-            <text x="747" y="290" text-anchor="middle" class="nodelabel">Rumah D</text>
-          </g>
-        </svg>
+            <!-- 9. ODP -->
+            <g class="node" data-id="topo_odp_new">
+              <rect x="800" y="65" width="40" height="30" rx="4" fill="#0F1A2E" stroke="#4FD1C5" stroke-width="2"/>
+              <text x="820" y="84" text-anchor="middle" class="nodelabel" fill="#fff">ODP</text>
+            </g>
+
+            <!-- 10. ONT -->
+            <g class="node" data-id="topo_ont_new">
+              <rect x="885" y="65" width="40" height="30" rx="4" fill="#17233A" stroke="#F5A623" stroke-width="1.5"/>
+              <text x="905" y="84" text-anchor="middle" class="nodelabel" fill="#fff">ONT</text>
+            </g>
+
+            <!-- 11. Pelanggan -->
+            <g class="node" data-id="topo_pelanggan">
+              <circle cx="1015" cy="80" r="20" fill="#0F1A2E" stroke="#F5A623" stroke-width="1.5"/>
+              <text x="1015" y="84" text-anchor="middle" class="nodelabel" fill="#fff">User</text>
+              <text x="1015" y="120" text-anchor="middle" class="nodelabel" fill="#5D7092">Pelanggan</text>
+            </g>
+          </svg>
+        </div>
       </div>
 
       <div class="device-panel">
         <div class="ph">Peran Perangkat Fiber Optic</div>
         <h4>Klik salah satu node di atas</h4>
-        <p class="placeholder dev-body">Pilih METRO, OLT, ODC, ODP, atau ONT pada diagram untuk melihat detail jalurnya.</p>
+        <p class="placeholder dev-body">Pilih Internet, CORE, MPLS, Agg, Metro-E, OLT, ODF, ODC, ODP, atau ONT pada diagram untuk melihat detail jalurnya.</p>
       </div>
 
       <div class="tip">
@@ -2673,15 +2674,17 @@ const deviceInfo={
   r2:{title:'Router Distribusi',body:'Router distribusi meneruskan traffic antar jaringan sesuai routing table dan menghubungkan jaringan Layer 3 dengan jaringan tujuan.'},
   swb:{title:'Switch Akses Tujuan',body:'Switch tujuan menggunakan MAC Address table untuk meneruskan frame ke port yang sesuai.'},
   pcb:{title:'Server Tujuan (Web/App)',body:'Server tujuan menerima traffic dan memproses data sampai ke aplikasi yang menyediakan layanan kepada user.'},
-  olt:{title:'OLT (Optical Line Terminal) — di STO',body:'Perangkat aktif di STO (Sentral Telepon Otomat) / Central Office milik provider. OLT adalah titik awal penyaluran layanan (Internet, IPTV, VoIP) yang mengubah sinyal listrik jadi sinyal optik dan mengirimkannya lewat Kabel Feeder menuju ODC.'},
-  odc:{title:'ODC (Optical Distribution Cabinet)',body:'Kabinet/pole distribusi pertama setelah STO, biasa dipasang di pinggir jalan (ground/pole mounted). Di sinilah splitting sinyal tahap pertama terjadi (umumnya rasio 1:4), memecah 1 core dari OLT menjadi beberapa jalur Kabel Distribusi menuju beberapa ODP.'},
-  odp1:{title:'ODP (Optical Distribution Point)',body:'Titik distribusi terakhir sebelum rumah pelanggan, biasanya dipasang di tiang atau pedestal dekat perumahan. ODP melakukan splitting tahap kedua (umumnya 1:8), sehingga total rasio splitting end-to-end dari OLT ke pelanggan bisa mencapai 1:32.'},
-  odp2:{title:'ODP (Optical Distribution Point)',body:'Sama seperti ODP-1, tapi melayani cluster/blok pelanggan yang berbeda. Kapasitas port ODP terbatas (misal 8 atau 16 port) — inilah kenapa saat provisioning pelanggan baru, teknisi harus cek dulu port ODP mana yang masih available.'},
-  ontA:{title:'ONT (Modem Pelanggan) — Rumah A',body:'Perangkat di sisi pelanggan (Customer Premises Equipment) yang mengubah sinyal optik dari Kabel Drop menjadi sinyal ethernet agar bisa dipakai router/PC. Setiap ONT diregistrasi unik di OLT lewat serial number saat proses provisioning.'},
-  ontB:{title:'ONT (Modem Pelanggan) — Rumah B',body:'Satu port di ODP hanya melayani satu ONT/pelanggan. Kalau LOS menyala di ONT ini, kemungkinan penyebabnya ada di segmen Kabel Drop antara ODP dan rumah, bukan di jalur OLT/ODC yang dipakai bersama pelanggan lain.'},
-  ontC:{title:'ONT (Modem Pelanggan) — Rumah C',body:'Terhubung ke ODP-2 yang berbeda dari Rumah A/B. Kalau ada gangguan massal yang hanya berdampak ke Rumah C & D tapi tidak ke A & B, itu indikasi kuat masalahnya ada di ODP-2 atau kabel distribusinya, bukan di OLT.'},
-  ontD:{title:'ONT (Modem Pelanggan) — Rumah D',body:'ONT mengirim laporan level daya optik (RX Power) yang bisa dipantau OLT/NMS secara remote. Nilai RX Power yang terlalu redup (misal di bawah -27 dBm) biasanya jadi indikator awal sebelum pelanggan benar-benar mengalami LOS total.'},
-  topo_metro:{title:'METRO Ethernet',body:'Jaringan inti backbone provider Telkom yang terhubung langsung ke Internet pusat. Bertugas mengalirkan traffic kapasitas raksasa ke masing-masing STO/OLT di tiap wilayah.'},
+  topo_internet: {title: 'Internet / Peering / DC', body: 'Sumber muara traffic global. Titik di mana jaringan ISP bertukar data dengan Data Center atau provider internasional lainnya.'},
+  topo_core: {title: 'Core Router', body: 'Router berkapasitas sangat raksasa yang menangani routing di tingkat nasional atau regional. Beban kerjanya masif dan fokus pada kecepatan pengiriman paket.'},
+  topo_mpls: {title: 'IP/MPLS Backbone', body: 'Jaringan backbone berkecepatan tinggi yang menggunakan label (MPLS) untuk mempercepat pengiriman data dan menjamin QoS antar wilayah tanpa perlu membaca IP satu-satu.'},
+  topo_agg: {title: 'Aggregation Switch/Router', body: 'Titik kumpul (agregasi). Menggabungkan traffic dari banyak router Metro-E di berbagai wilayah sebelum diarahkan naik ke jalur IP/MPLS Backbone.'},
+  topo_metro_e: {title: 'METRO Ethernet', body: 'Jaringan distribusi skala kota (MAN). Bertugas menjemput traffic dari berbagai Sentral (OLT) untuk disalurkan ke level Aggregation.'},
+  topo_olt: {title: 'OLT (Optical Line Terminal)', body: 'Gerbang utama jaringan GPON di STO (Sentral). Mengubah sinyal listrik dari Metro menjadi sinyal cahaya yang ditembakkan ke kabel fiber arah pelanggan.'},
+  topo_odf: {title: 'ODF (Optical Distribution Frame)', body: 'Rak terminasi di dalam STO. Tempat bertemunya kabel patchcord dari OLT dengan kabel Feeder utama (kabel fiber besar) yang menuju ke jalanan/lapangan.'},
+  topo_odc_new: {title: 'ODC (Optical Distribution Cabinet)', body: 'Kotak pembagi pasif pertama di jalanan/trotoar. Memecah 1 core dari kabel Feeder (menggunakan Splitter) menjadi beberapa kabel Distribusi.'},
+  topo_odp_new: {title: 'ODP (Optical Distribution Point)', body: 'Kotak pembagi pasif kedua di tiang listrik. Mendistribusikan jalur dari kabel Distribusi menjadi kabel-kabel Drop Core (kabel hitam kecil) yang ditarik ke masing-masing rumah.'},
+  topo_ont_new: {title: 'ONT (Optical Network Terminal)', body: 'Modem di rumah pelanggan (CPE). Menangkap sinyal cahaya dari Drop Core, lalu mengubahnya kembali jadi sinyal listrik/ethernet dan memancarkan WiFi.'},
+  topo_pelanggan: {title: 'Pelanggan / End User', body: 'Perangkat user seperti PC, Laptop, atau Smartphone yang menerima akses internet, IPTV, atau VoIP dari ONT.'},
   topo_isp:{title:'ISP / Internet',body:'Gerbang menuju internet global. Di skenario riil, Core Router kita diarahkan ke sini menggunakan Default Route (0.0.0.0/0).'},
   topo_r1:{title:'Core Router R1 (HQ)',body:'Router utama di kantor pusat. Menjalankan peran krusial: 1) Menyediakan IP otomatis (DHCP Server), 2) Menjembatani antar VLAN (Router on a Stick), 3) Mentranslasikan IP Lokal ke Publik (NAT) agar PC bisa berinternet, dan 4) Bertukar rute OSPF dengan router cabang.'},
   topo_r2:{title:'Router R2 (Branch)',body:'Router di kantor cabang. Berkomunikasi dengan Router HQ menggunakan protokol OSPF lewat jalur WAN, sehingga jaringan cabang bisa terkoneksi dengan pusat secara otomatis.'},
